@@ -1,0 +1,42 @@
+# macOS
+.DS_Store
+*.swp
+# Xcode / Swift
+.build/
+DerivedData/
+*.xcuserstate
+xcuserdata/
+*.xcworkspace/xcuserdata/
+.swiftpm/xcode/
+# Node
+node_modules/
+dist/
+coverage/
+*.tsbuildinfo
+.npm/
+# Android / Gradle / Kotlin
+.gradle/
+build/
+local.properties
+*.iml
+.idea/
+captures/
+.kotlin/
+# Python
+__pycache__/
+*.pyc
+.venv/
+# Rust / Go
+target/
+# Env / secrets
+.env
+.env.*
+!.env.example
+*.p8
+*.p12
+*.mobileprovision
+*.keystore
+*.jks
+# Logs
+*.log
+npm-debug.log*
