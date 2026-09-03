@@ -1,0 +1,210 @@
+{
+  "generated_by": "server/src/tools/fixtures.ts",
+  "now": 1800000000,
+  "device_id": "device-fixture-0001",
+  "trusted_keys": [
+    {
+      "kid": "53ba2c88782e6d05",
+      "x": "OA6559_5qKIazXO5uiTP1uauYnigfj5IDbgU_7FYZ2s"
+    }
+  ],
+  "untrusted_key": {
+    "kid": "17328d2764e16507",
+    "x": "UqdRgZRwBsutIQacCgMhokgsn1y4BkWdeFWDq3OZvA8"
+  },
+  "tokens": [
+    {
+      "name": "perpetual-standard",
+      "token": "MZL1.eyJ2IjoxLCJraWQiOiI1M2JhMmM4ODc4MmU2ZDA1IiwicHJvZHVjdCI6Im1pcnJvcnoiLCJkZXYiOiJkZXZpY2UtZml4dHVyZS0wMDAxIiwiaWF0IjoxODAwMDAwMDAwLCJtYXhfZGV2IjozLCJsaWQiOiJsaWNfcGVycCIsImtpbmQiOiJwZXJwZXR1YWwiLCJwbGFuIjoic3RhbmRhcmQiLCJmZWF0dXJlcyI6WyJ2bSIsImJvdHRsZXMiLCJuby1hZHMiXSwiZXhwIjoxODAyNTkyMDAwLCJ1cGQiOjE4MzE1MzYwMDB9.waEQ6AAfcNiD9LOW6hFc68zURqAv_aTbuMxtChuCAO5uJ2iURUEv5oDBz51ZwoGLTcreLhzvCZYpWxAfJOX0Cg",
+      "expect": {
+        "valid": true,
+        "entitled_at_now": true,
+        "mode_at_now": "full",
+        "mode_after_updates_window": "updates_expired",
+        "entitled_after_updates_window": true
+      }
+    },
+    {
+      "name": "subscription-pro-active",
+      "token": "MZL1.eyJ2IjoxLCJraWQiOiI1M2JhMmM4ODc4MmU2ZDA1IiwicHJvZHVjdCI6Im1pcnJvcnoiLCJkZXYiOiJkZXZpY2UtZml4dHVyZS0wMDAxIiwiaWF0IjoxODAwMDAwMDAwLCJtYXhfZGV2IjozLCJsaWQiOiJsaWNfc3ViIiwia2luZCI6InN1YnNjcmlwdGlvbiIsInBsYW4iOiJwcm8iLCJmZWF0dXJlcyI6WyJ2bSIsImNsaSJdLCJleHAiOjE4MDI1OTIwMDAsInN1Yl9leHAiOjE4MDMxOTY4MDB9.9cPjY32K8rDMK9-BezQHOe-arBWPfVzTtHwFVvCPZfKLYG97AdhPgNFOwtnmyiDRiNdreposZ3EM2jBArNyLDw",
+      "expect": {
+        "valid": true,
+        "entitled_at_now": true,
+        "mode_at_now": "full",
+        "entitled_at": {
+          "1803110400": true,
+          "1803283200": false
+        }
+      }
+    },
+    {
+      "name": "trial",
+      "token": "MZL1.eyJ2IjoxLCJraWQiOiI1M2JhMmM4ODc4MmU2ZDA1IiwicHJvZHVjdCI6Im1pcnJvcnoiLCJkZXYiOiJkZXZpY2UtZml4dHVyZS0wMDAxIiwiaWF0IjoxODAwMDAwMDAwLCJtYXhfZGV2IjozLCJsaWQiOiJsaWNfdHJpYWwiLCJraW5kIjoidHJpYWwiLCJwbGFuIjoidHJpYWwiLCJmZWF0dXJlcyI6WyJ2bSJdLCJleHAiOjE4MDEyMDk2MDAsInN1Yl9leHAiOjE4MDEyMDk2MDB9.4-r4WEgKpXWTDOhCReLLvUtR49wiJfZMBLX5w5x-9Oxr7gFl3dQDiHVoWH8v1oGT7cv-qk8-lFKKUOoXkcOgDA",
+      "expect": {
+        "valid": true,
+        "entitled_at_now": true,
+        "entitled_at": {
+          "1801296000": false
+        }
+      }
+    },
+    {
+      "name": "wrong-device",
+      "token": "MZL1.eyJ2IjoxLCJraWQiOiI1M2JhMmM4ODc4MmU2ZDA1IiwicHJvZHVjdCI6Im1pcnJvcnoiLCJkZXYiOiJkZXZpY2Utb3RoZXIiLCJpYXQiOjE4MDAwMDAwMDAsIm1heF9kZXYiOjMsImxpZCI6ImxpY19kZXYiLCJraW5kIjoicGVycGV0dWFsIiwicGxhbiI6InN0YW5kYXJkIiwiZmVhdHVyZXMiOltdLCJleHAiOjE4MDAwODY0MDAsInVwZCI6MTgwMDA4NjQwMH0.6tkXfBusoqF-uum5JVOdMedXexcIVAtN8_IsoTFs-1y3lapni521TlcEP6XBTsTTeaT41mP_X-hxG3MpRjJSDQ",
+      "expect": {
+        "valid": false,
+        "error": "device_mismatch"
+      }
+    },
+    {
+      "name": "unknown-kid",
+      "token": "MZL1.eyJ2IjoxLCJraWQiOiJub3BlIiwicHJvZHVjdCI6Im1pcnJvcnoiLCJkZXYiOiJkZXZpY2UtZml4dHVyZS0wMDAxIiwiaWF0IjoxODAwMDAwMDAwLCJtYXhfZGV2IjozLCJsaWQiOiJsaWNfa2lkIiwia2luZCI6InBlcnBldHVhbCIsInBsYW4iOiJzdGFuZGFyZCIsImZlYXR1cmVzIjpbXSwiZXhwIjoxODAwMDg2NDAwLCJ1cGQiOjE4MDAwODY0MDB9.ENYS1NcbL63dn-TcBHfvZsZy5O54qTUkUPGnd2PEiclS2avlVOHq34ovHAR-fk1opcRXkLpqDMSmDAZqr3VpAg",
+      "expect": {
+        "valid": false,
+        "error": "unknown_kid"
+      }
+    },
+    {
+      "name": "foreign-signer",
+      "token": "MZL1.eyJ2IjoxLCJraWQiOiI1M2JhMmM4ODc4MmU2ZDA1IiwicHJvZHVjdCI6Im1pcnJvcnoiLCJkZXYiOiJkZXZpY2UtZml4dHVyZS0wMDAxIiwiaWF0IjoxODAwMDAwMDAwLCJtYXhfZGV2IjozLCJsaWQiOiJsaWNfZm9yZWlnbiIsImtpbmQiOiJwZXJwZXR1YWwiLCJwbGFuIjoic3RhbmRhcmQiLCJmZWF0dXJlcyI6W10sImV4cCI6MTgwMDA4NjQwMCwidXBkIjoxODAwMDg2NDAwfQ.tZ0ioLtoeJJ831C3YDwNgsjJyzH8yl60DnoAb7Vxr1kcAi8pGpvlBsRRfGmd-HhBj0FCzrhlC9-1QLnOk9zqBA",
+      "expect": {
+        "valid": false,
+        "error": "bad_signature"
+      }
+    },
+    {
+      "name": "tampered",
+      "token": "MZL1.eyJ2IjoxLCJraWQiOiI1M2JhMmM4ODc4MmU2ZDA1IiwicHJvZHVjdCI6Im1pcnJvcnoiLCJkZXYiOiJkZXZpY2UtZml4dHVyZS0wMDAxIiwiaWF0IjoxODAwMDAwMDAwLCJtYXhfZGV2IjozLCJsaWQiOiJsaWNfcGVycCIsImtpbmQiOiJwZXJwZXR1YWwiLCJwbGFuIjoicHJvIiwiZmVhdHVyZXMiOlsidm0iLCJib3R0bGVzIiwibm8tYWRzIl0sImV4cCI6MTgwMjU5MjAwMCwidXBkIjoxODMxNTM2MDAwfQ.waEQ6AAfcNiD9LOW6hFc68zURqAv_aTbuMxtChuCAO5uJ2iURUEv5oDBz51ZwoGLTcreLhzvCZYpWxAfJOX0Cg",
+      "expect": {
+        "valid": false,
+        "error": "bad_signature"
+      }
+    },
+    {
+      "name": "malformed",
+      "token": "MZL1.abc",
+      "expect": {
+        "valid": false,
+        "error": "malformed"
+      }
+    }
+  ],
+  "license_keys": {
+    "valid": [
+      "MZ-BPJ2W-F5C8D-4N1DJ-K0YZZ-M7E8V",
+      "MZ-W8N6A-BAPNB-05WD7-4Y4CZ-T9DC0",
+      "MZ-F8SM5-FQZ8K-1KB9H-D6K96-DT14T",
+      "MZ-WNQPK-RVKH1-J69RG-TWYF4-TW0B6",
+      "MZ-YX2D1-968KM-0HWP4-J7914-MCJ57",
+      "MZ-B9M3N-7SWWH-5SR4T-V4CFV-VYJW7",
+      "MZ-67PPS-E1PR3-7D85T-WW6N3-95523",
+      "MZ-7YFTA-SN31C-MCF9P-0NYPD-BA50Y",
+      "MZ-PMWE0-SHZDN-0A63J-TPGNE-EFFG3",
+      "MZ-RKH1P-8X64B-8RYPX-V20TW-7ZFH0",
+      "MZ-E33J2-H8J0K-ZXMVY-D0DKJ-Z9FYZ",
+      "MZ-D2GFF-0RMJH-367B6-8K52A-41X5T",
+      "MZ-9P1RY-02P74-YZE2H-F4Y77-NVAJD",
+      "MZ-DK9RK-K19GA-DHTYH-BAMZC-2320Z",
+      "MZ-5GYM0-WYA1F-04PYY-4YFYF-FVW62",
+      "MZ-RNJR8-ERGC1-YA1W8-X6Z7N-4YJR5",
+      "MZ-4ZE2P-DQ1AM-HDB17-QVQCC-5YJ8F",
+      "MZ-GCW9R-BE36F-39PZF-ZRH1G-3QMM0",
+      "MZ-21KTA-41S35-12088-TNY59-SH9RG",
+      "MZ-C1E41-31PW0-7MC9J-2X9PH-JC8GC",
+      "MZ-ACERV-DZ5FQ-8F0HN-1QEZ8-F5VK6",
+      "MZ-5CX84-7AF31-1ZEPQ-87Q2C-QK5KV",
+      "MZ-PBTEE-8B0Z9-Y8RCA-2EEXJ-PYCST",
+      "MZ-ZXC0X-DRH95-BA3K3-1DGNV-TZBVJ",
+      "MZ-WDNRK-7HV1A-19MMM-NE9WX-ATTZ8",
+      "MZ-4E15F-HQGNR-2HPV8-58E62-H8GRH",
+      "MZ-MKDSF-XJQ5F-S5SVX-YVVD9-YEC1H",
+      "MZ-VFG7D-JSXSG-44Z59-04VHA-FW7W3",
+      "MZ-90G7H-8AQ1F-ZEGZ3-CFN8W-A8PFJ",
+      "MZ-V5TV3-6VHV2-67H2N-VEWW7-N83RZ",
+      "MZ-HCBW9-RCW6C-80GPE-54JWX-B7YW9",
+      "MZ-6B04Y-3JCRH-5RWRW-6AK9T-PDEMJ",
+      "MZ-117HX-FN9JP-Y97CW-W6BRD-QGG2M",
+      "MZ-SK9HQ-F8EH9-SC856-CTNK1-6VXNR",
+      "MZ-581EP-56DN0-861B6-86GGW-WT0R6",
+      "MZ-3HW1X-RJ0SV-JCSSA-XNHR9-Z1RZQ",
+      "MZ-VBBQA-HMCFQ-N7NJE-G8AH3-9G1ZN",
+      "MZ-09YPW-QC2WT-GA7TR-3F0V7-DYE7V",
+      "MZ-H72BG-HE596-1KVHA-HBK62-CDS4K",
+      "MZ-TBR9Z-FMTZE-W9APQ-J49W1-0YQW3",
+      "MZ-15KAY-ET7H5-BTMTF-PYQ08-C5MAH",
+      "MZ-1851Y-SV34H-YAZ9G-AA341-W97GW",
+      "MZ-SNERG-5KGBZ-0DNQE-6ADZZ-R67NN",
+      "MZ-XCF92-BV8ST-9MEM0-E0WQK-D7YF6",
+      "MZ-6Q18F-TYQ8X-4V8QW-7XYSH-2G7G9",
+      "MZ-4C9GE-FFFHG-B51E3-SHB20-PD79N",
+      "MZ-FGRPP-DS0S9-J7PR2-Y1NTY-4Y0J8",
+      "MZ-F4QB5-1ZQ8A-7BQYX-67RYY-VMSG0",
+      "MZ-6JDB0-PM98W-EGD20-KNM7N-39APV",
+      "MZ-8ZP9Y-QWN4M-WJSS9-2QJE8-Y28Q3"
+    ],
+    "invalid": [
+      "",
+      "MZ-AAAAA",
+      "MZ-UUUUU-UUUUU-UUUUU-UUUUU-UUUUU",
+      "not a key",
+      "MZ-CPJ2W-F5C8D-4N1DJ-K0YZZ-M7E8V",
+      "MZ-W9N6A-BAPNB-05WD7-4Y4CZ-T9DC0",
+      "MZ-F8TM5-FQZ8K-1KB9H-D6K96-DT14T",
+      "MZ-WNQQK-RVKH1-J69RG-TWYF4-TW0B6",
+      "MZ-YX2D2-968KM-0HWP4-J7914-MCJ57",
+      "MZ-B9M3N-8SWWH-5SR4T-V4CFV-VYJW7",
+      "MZ-67PPS-E2PR3-7D85T-WW6N3-95523",
+      "MZ-7YFTA-SN41C-MCF9P-0NYPD-BA50Y",
+      "MZ-PMWE0-SHZEN-0A63J-TPGNE-EFFG3",
+      "MZ-RKH1P-8X64C-8RYPX-V20TW-7ZFH0",
+      "MZ-E33J2-H8J0K-0XMVY-D0DKJ-Z9FYZ",
+      "MZ-D2GFF-0RMJH-377B6-8K52A-41X5T",
+      "MZ-9P1RY-02P74-YZF2H-F4Y77-NVAJD",
+      "MZ-DK9RK-K19GA-DHTZH-BAMZC-2320Z",
+      "MZ-5GYM0-WYA1F-04PYZ-4YFYF-FVW62",
+      "MZ-RNJR8-ERGC1-YA1W8-Y6Z7N-4YJR5"
+    ],
+    "normalization": [
+      {
+        "input": "mz bpj2w f5c8d 4nldj koyzz m7e8v",
+        "normalized": "BPJ2WF5C8D4N1DJK0YZZM7E8V"
+      },
+      {
+        "input": "mz w8n6a bapnb o5wd7 4y4cz t9dco",
+        "normalized": "W8N6ABAPNB05WD74Y4CZT9DC0"
+      },
+      {
+        "input": "mz f8sm5 fqz8k lkb9h d6k96 dtl4t",
+        "normalized": "F8SM5FQZ8K1KB9HD6K96DT14T"
+      },
+      {
+        "input": "mz wnqpk rvkhl j69rg twyf4 twob6",
+        "normalized": "WNQPKRVKH1J69RGTWYF4TW0B6"
+      },
+      {
+        "input": "mz yx2dl 968km ohwp4 j79l4 mcj57",
+        "normalized": "YX2D1968KM0HWP4J7914MCJ57"
+      },
+      {
+        "input": "mz b9m3n 7swwh 5sr4t v4cfv vyjw7",
+        "normalized": "B9M3N7SWWH5SR4TV4CFVVYJW7"
+      },
+      {
+        "input": "mz 67pps elpr3 7d85t ww6n3 95523",
+        "normalized": "67PPSE1PR37D85TWW6N395523"
+      },
+      {
+        "input": "mz 7yfta sn3lc mcf9p onypd ba5oy",
+        "normalized": "7YFTASN31CMCF9P0NYPDBA50Y"
+      },
+      {
+        "input": "mz pmweo shzdn oa63j tpgne effg3",
+        "normalized": "PMWE0SHZDN0A63JTPGNEEFFG3"
+      },
+      {
+        "input": "mz rkhlp 8x64b 8rypx v2otw 7zfho",
+        "normalized": "RKH1P8X64B8RYPXV20TW7ZFH0"
+      }
+    ]
+  }
+}
