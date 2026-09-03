@@ -117,6 +117,13 @@ export function buildApp(deps: AppDeps): FastifyInstance {
     return deps.licenses.activate(body.key, body.device);
   });
 
+  app.post('/v1/trials', async (req, reply) => {
+    if (!activateLimiter.allow(clientIp(req))) throw new HttpError(429, 'too many requests', 'rate_limited');
+    const body = parse(z.object({ device: DeviceSchema }), req.body);
+    const r = deps.licenses.startTrial(body.device);
+    return reply.status(r.existing ? 200 : 201).send(r);
+  });
+
   app.post('/v1/licenses/refresh', async (req) => {
     const body = parse(RefreshSchema, req.body);
     return deps.licenses.refresh(body.token);

@@ -1,0 +1,48 @@
+{
+  "_comment": "Single source of truth for prices. PROVISIONAL until docs/research/market/pricing-landscape-and-strategy.md is finalized; clients read display strings from the stores at runtime, the website reads this file at build time.",
+  "currency": "USD",
+  "status": "provisional",
+  "principles": ["No ads, ever", "No nag screens", "Perpetual option on every consumer plan", "Perpetual = 12 months of feature updates, security updates forever, never expires", "Subscriptions can be cancelled in one click", "Switch-from-competitor discount", "Family sharing on Apple platforms"],
+  "plans": {
+    "standard": {
+      "name": "MIRRORZ Standard",
+      "tagline": "Run Windows and PC apps on your Mac. AutoCAD-ready.",
+      "monthly": 7.99,
+      "annual": 59.99,
+      "perpetual": 129.99,
+      "perpetual_upgrade_after_updates_window": 49.99,
+      "devices": 3,
+      "product_ids": { "monthly": "com.mirrorz.standard.monthly", "annual": "com.mirrorz.standard.annual", "perpetual": "com.mirrorz.standard.perpetual" }
+    },
+    "pro": {
+      "name": "MIRRORZ Pro",
+      "tagline": "Everything in Standard plus developer & power tools.",
+      "monthly": 11.99,
+      "annual": 89.99,
+      "perpetual": 179.99,
+      "perpetual_upgrade_after_updates_window": 69.99,
+      "devices": 5,
+      "product_ids": { "monthly": "com.mirrorz.pro.monthly", "annual": "com.mirrorz.pro.annual", "perpetual": "com.mirrorz.pro.perpetual" }
+    },
+    "business": {
+      "name": "MIRRORZ Business",
+      "tagline": "Per-seat, centrally managed, MDM-deployable.",
+      "annual_per_seat": 99.99,
+      "min_seats": 5,
+      "devices_per_seat": 2,
+      "product_ids": { "annual": "com.mirrorz.business.annual" },
+      "channel": "direct only (Stripe / invoice)"
+    }
+  },
+  "trial": { "days": 14, "requires_card": false, "one_per_device": true },
+  "offers": {
+    "switch": { "name": "Switch from Parallels / VMware / CrossOver", "discount_pct": 30, "applies_to": ["annual", "perpetual"], "proof": "upload a receipt or license email; verified by support" },
+    "education": { "discount_pct": 40, "applies_to": ["annual", "perpetual"] }
+  },
+  "stores": {
+    "mac_app_store": { "sells": ["standard", "pro"], "perpetual_as": "non-consumable IAP", "family_sharing": true },
+    "ios_app_store": { "sells": ["standard", "pro"], "note": "Companion app; purchases sync to the Mac via the same Apple ID / MIRRORZ account" },
+    "google_play": { "sells": ["standard", "pro"], "note": "Companion app; one-time products for perpetual" },
+    "direct": { "sells": ["standard", "pro", "business"], "processor": "Stripe", "note": "Perpetual keys delivered by email; notarized direct-download build" }
+  }
+}

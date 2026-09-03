@@ -104,3 +104,13 @@ test('stripe webhook uses the raw body for signatures; disabled providers return
   const badJson = await app.inject({ method: 'POST', url: '/v1/licenses/refresh', headers: { 'content-type': 'application/json' }, payload: '{not json' });
   assert.equal(badJson.statusCode, 400);
 });
+
+test('trial endpoint issues a device-bound trial and is idempotent', async () => {
+  const { app } = make();
+  const a = await app.inject({ method: 'POST', url: '/v1/trials', payload: { device: { id: 'trial-device-0001', platform: 'macos' } } });
+  assert.equal(a.statusCode, 201, a.body);
+  assert.equal(a.json().license.kind, 'trial');
+  const b = await app.inject({ method: 'POST', url: '/v1/trials', payload: { device: { id: 'trial-device-0001', platform: 'macos' } } });
+  assert.equal(b.statusCode, 200);
+  assert.equal(b.json().license.id, a.json().license.id);
+});

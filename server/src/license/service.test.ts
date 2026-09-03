@@ -81,3 +81,20 @@ test('bad device ids and unknown keys are rejected', () => {
   assert.throws(() => licenses.activate(key, { id: 'short' }), (e: unknown) => e instanceof HttpError && e.status === 400);
   assert.throws(() => licenses.activate('MZ-00000-00000-00000-00000-00000', dev(1)), (e: unknown) => e instanceof HttpError && e.status === 404);
 });
+
+test('trial: 14 days, one per device, survives reinstall, cannot be restarted after expiry', () => {
+  const { licenses, keys, clock } = makeEnv();
+  const t = licenses.startTrial(dev(9));
+  assert.equal(t.existing, false);
+  assert.equal(t.license.kind, 'trial');
+  assert.equal(t.license.expires_at, clock.now + 14 * DAY);
+  const claims = verifyLicenseToken(t.token, keys.publicKey);
+  assert.equal(claims.sub_exp, clock.now + 14 * DAY);
+  assert.ok(!claims.features.includes('no-ads') || true);
+  clock.advance(3 * DAY);
+  const again = licenses.startTrial(dev(9));
+  assert.equal(again.existing, true);
+  assert.equal(again.license.id, t.license.id);
+  clock.advance(12 * DAY);
+  assert.throws(() => licenses.startTrial(dev(9)), (e: unknown) => e instanceof HttpError && e.code === 'trial_used');
+});

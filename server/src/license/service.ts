@@ -176,6 +176,23 @@ export class LicenseService {
     return row;
   }
 
+  /**
+   * Free trial: one per device id, ever. Bound to the device so a reinstall does not reset it.
+   * The synthetic key is derived from the device id so the client can re-activate without storing it.
+   */
+  startTrial(device: DeviceInfo, days = 14): { token: string; license: PublicLicenseView; existing: boolean } {
+    const ref = `trial:${sha256Hex(device.id)}`;
+    const existing = this.findBySourceRef('trial', ref);
+    if (existing) {
+      const ent = this.entitlement(existing);
+      if (!ent.entitled) throw new HttpError(403, `trial already used on this device (${ent.reason})`, 'trial_used');
+      return { ...this.activateById(existing.id, device), existing: true };
+    }
+    const now = this.clock();
+    const { license } = this.issue({ kind: 'trial', plan: 'trial', source: 'trial', sourceRef: ref, maxDevices: 1, expiresAt: now + days * DAY });
+    return { ...this.activateById(license.id, device), existing: false };
+  }
+
   // ---------- lookup ----------
 
   getById(id: string): LicenseRow | undefined {
