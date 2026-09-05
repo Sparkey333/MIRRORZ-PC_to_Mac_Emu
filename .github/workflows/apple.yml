@@ -23,8 +23,9 @@ jobs:
       - uses: maxim-lobanov/setup-xcode@v1
         with: { xcode-version: latest-stable }
       - name: Build & test MirrorzEngine
-        working-directory: apps/macos/Packages/MirrorzEngine
-        run: test -f Package.swift && swift build && swift test || echo "engine package not present yet"
+        run: |
+          cd apps/macos/Packages/MirrorzEngine 2>/dev/null || { echo "engine package not present yet"; exit 0; }
+          swift build && swift test
   macos-app:
     name: MIRRORZ macOS app (unsigned)
     runs-on: macos-15
@@ -57,8 +58,8 @@ jobs:
         with: { xcode-version: latest-stable }
       - run: brew install xcodegen
       - name: Generate & build
-        working-directory: apps/ios
         run: |
+          cd apps/ios 2>/dev/null || { echo "ios app not present yet"; exit 0; }
           test -f project.yml || { echo "project.yml not present yet"; exit 0; }
           xcodegen generate
           xcodebuild -project MIRRORZCompanion.xcodeproj -scheme MIRRORZCompanion -destination 'generic/platform=iOS Simulator' CODE_SIGNING_ALLOWED=NO build

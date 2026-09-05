@@ -268,7 +268,7 @@ final class CompatClientTests: XCTestCase {
             XCTAssertEqual(error.apiError?.code, .notFound)
         }
 
-        let offline = makeClient(.offline())
+        let offline = makeClient(FakeTransport.offline())
         let local = try await offline.app(id: "revit")
         XCTAssertEqual(local.rating, .silver)
         XCTAssertNil(local.community)
@@ -295,7 +295,7 @@ final class CompatClientTests: XCTestCase {
         let decision = await makeClient(remote).route(RouteRequest(arch: .x86))
         XCTAssertEqual(decision, RouteDecision(runtime: .vm, reason: "server said so"))
 
-        let offline = await makeClient(.offline()).route(RouteRequest(arch: .x86))
+        let offline = await makeClient(FakeTransport.offline()).route(RouteRequest(arch: .x86))
         XCTAssertEqual(offline.runtime, .bottle)
     }
 
