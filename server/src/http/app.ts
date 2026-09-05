@@ -6,6 +6,7 @@ import type { StripeBilling } from '../billing/stripe.js';
 import type { CompatService } from '../compat/service.js';
 import { publicKeyJwk, publicKeyRawB64Url, type SigningKeys } from '../license/keys.js';
 import type { LicenseService } from '../license/service.js';
+import { registerRemote, type RemoteDeps } from '../remote/ws.js';
 import { HttpError } from '../util.js';
 import { RateLimiter } from './ratelimit.js';
 
@@ -19,6 +20,8 @@ export interface AppDeps {
   adminToken?: string;
   logger?: boolean | object;
   googlePushToken?: string;
+  /** MIRRORZ Remote (pairing + WebRTC signaling); omitted = endpoints not registered. */
+  remote?: RemoteDeps;
 }
 
 const DeviceSchema = z.object({
@@ -228,6 +231,18 @@ export function buildApp(deps: AppDeps): FastifyInstance {
     if (!lic) throw new HttpError(404, 'license not found', 'not_found');
     return deps.licenses.view(lic);
   });
+
+  // ---------- remote (pairing + signaling) ----------
+  if (deps.remote) {
+    registerRemote(app, deps.remote);
+  } else {
+    const disabled = async () => {
+      throw new HttpError(503, 'remote pairing disabled', 'disabled');
+    };
+    app.post('/v1/remote/pairings', disabled);
+    app.get('/v1/remote/ice', disabled);
+    app.get('/v1/remote/ws', disabled);
+  }
 
   return app;
 }

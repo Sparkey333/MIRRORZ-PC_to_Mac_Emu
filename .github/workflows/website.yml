@@ -1,0 +1,23 @@
+name: website
+on:
+  push:
+    paths: ['website/**', 'pricing/pricing.json', '.github/workflows/website.yml']
+  pull_request:
+    paths: ['website/**', 'pricing/pricing.json', '.github/workflows/website.yml']
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '22' }
+      - name: Validate pricing.json
+        run: node -e "JSON.parse(require('fs').readFileSync('pricing/pricing.json','utf8')); console.log('pricing.json ok')"
+      - name: Build website
+        run: test -f website/build.mjs && node website/build.mjs || echo "website not present yet"
+      - name: HTML validation
+        run: |
+          test -d website/dist || exit 0
+          npx --yes html-validate "website/dist/**/*.html" || true
+      - uses: actions/upload-artifact@v4
+        with: { name: website, path: website/dist, if-no-files-found: ignore }

@@ -8,6 +8,7 @@ import { openDb } from './db.js';
 import { buildApp } from './http/app.js';
 import { generateSigningKeys, loadSigningKeys } from './license/keys.js';
 import { LicenseService } from './license/service.js';
+import { createRemote } from './remote/index.js';
 
 const cfg = loadConfig();
 const db = openDb(cfg.dbPath);
@@ -40,6 +41,8 @@ if (cfg.google.serviceAccountJson) {
 const stripe = new StripeBilling(db, licenses, mailer, { ...(cfg.stripe.webhookSecret ? { webhookSecret: cfg.stripe.webhookSecret } : {}) });
 if (!cfg.stripe.webhookSecret) console.warn('[mirrorz] STRIPE_WEBHOOK_SECRET not set: Stripe webhook signatures are NOT verified (dev only)');
 
+const remote = createRemote({ licenses, keys });
+
 const app = buildApp({
   licenses,
   keys,
@@ -48,9 +51,16 @@ const app = buildApp({
   ...(google ? { google } : {}),
   stripe,
   ...(cfg.adminToken ? { adminToken: cfg.adminToken } : {}),
-  logger: { level: cfg.logLevel },
+  remote,
+  logger: {
+    level: cfg.logLevel,
+    // Privacy: never log query strings (device tokens / pairing codes travel there) or client IPs.
+    serializers: {
+      req: (req: { method?: string; url?: string }) => ({ method: req.method, url: String(req.url ?? '').split('?')[0] }),
+    },
+  },
 });
 
 app.listen({ port: cfg.port, host: cfg.host }).then((addr) => {
-  console.log(`[mirrorz] licensing server listening on ${addr} (kid=${keys.kid}, compat=${compat.version()})`);
+  console.log(`[mirrorz] licensing server listening on ${addr} (kid=${keys.kid}, compat=${compat.version()}, remote=on)`);
 });

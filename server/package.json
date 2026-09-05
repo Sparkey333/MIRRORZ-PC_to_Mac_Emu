@@ -4,7 +4,9 @@
   "private": true,
   "description": "MIRRORZ licensing, entitlement, and compatibility-database service",
   "type": "module",
-  "engines": { "node": ">=22.12" },
+  "engines": {
+    "node": ">=22.12"
+  },
   "scripts": {
     "dev": "tsx watch src/main.ts",
     "build": "tsc -p tsconfig.json",
@@ -14,11 +16,14 @@
     "keygen": "tsx src/tools/keygen.ts"
   },
   "dependencies": {
+    "@fastify/websocket": "^11.3.0",
     "fastify": "^5.0.0",
+    "ws": "^8.21.3",
     "zod": "^3.23.8"
   },
   "devDependencies": {
     "@types/node": "^22.10.0",
+    "@types/ws": "^8.18.1",
     "tsx": "^4.19.0",
     "typescript": "^5.7.0"
   }
