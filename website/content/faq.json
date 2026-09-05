@@ -1,0 +1,10 @@
+[
+  { "q": "Does AutoCAD really run?", "a": "Yes. AutoCAD (x64) runs inside a Windows 11 ARM Machine using Microsoft's built-in Prism emulation, with MIRRORZ's CAD graphics preset fixing the cursor, HiDPI and hardware-acceleration problems Autodesk documents for VMs. Autodesk does not certify any virtual machine or Windows-on-ARM configuration, so we publish our own tested matrix per AutoCAD release and never claim vendor support." },
+  { "q": "Do I need to buy Windows?", "a": "For Machines, yes: MIRRORZ downloads Windows 11 ARM installation media from Microsoft after you accept Microsoft's terms, and you activate it with your own Windows 11 Pro key. Bottles run many Windows programs without any Windows license at all." },
+  { "q": "What does perpetual mean here?", "a": "You pay once and the app never stops working. You get every feature update for 12 months and security updates forever. After that you can keep using the version you have, or buy the discounted updates renewal. No forced yearly upgrades to keep working on a new macOS." },
+  { "q": "How many Macs can I use?", "a": "Standard: 3 Macs. Pro: 5 Macs. Deactivate a Mac anytime from Settings or from the companion app." },
+  { "q": "I bought on my iPhone or Android phone. How do I use it on my Mac?", "a": "The companion app shows your license key after purchase. Enter it in MIRRORZ on the Mac (or tap the mirrorz:// link) and you are activated." },
+  { "q": "Is there any tracking?", "a": "No analytics SDKs, no ads, no telemetry by default. The only optional outbound data is an anonymous 'this app works / does not work' report you can turn on to help other users." },
+  { "q": "Which Macs are supported?", "a": "Apple Silicon Macs (M1 and newer) on macOS 14 Sonoma or later. 16 GB of memory is recommended for CAD workloads; 8 GB is fine for Bottles and light Machines." },
+  { "q": "Can I cancel?", "a": "Subscriptions cancel in one click from the App Store, Google Play or our billing portal, and keep working until the end of the paid period. Direct purchases have a 30-day refund promise." }
+]
