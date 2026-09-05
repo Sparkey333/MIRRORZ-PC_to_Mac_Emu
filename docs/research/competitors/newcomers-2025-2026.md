@@ -1,170 +1,176 @@
-# New Entrants and Platform Shifts in Windows-on-Mac, 2025-2026
+# New Entrants and Market Moves in Windows-on-Mac, 2025-2026
 _Research date: 2026-09-03_
 
-_Method note: the session's web-search quota was already exhausted and the egress proxy blocks parallels.com, codeweavers.com, winehq.org, apple.com/newsroom, broadcom.com/vmware.com and reddit/news sites. Every fact below therefore comes from pages that were actually fetched on 2026-09-04: Apple developer documentation (JSON endpoints and RSS), GitHub repositories/topic pages, Homebrew cask definitions, Microsoft Learn (via the Microsoft Learn tool) and Autodesk help (via the Autodesk Product Help tool). Where a vendor page could not be reached, the item is marked **not verifiable in this session** instead of being stated from memory. GitHub shows release dates without a year; where a year is inferred it is noted with the evidence used._
+Scope: new products, forks, major releases and platform changes since January 2025 that affect running Windows/PC software (AutoCAD in particular) on Apple-silicon Macs. Facts marked **[verified]** were read from a fetched official page (Apple developer site, GitHub, Microsoft Learn/Support, Autodesk Help). Facts marked **[search-only]** come from search-result snippets of pages the research proxy blocked (parallels.com, codeweavers.com, broadcom.com, most news sites) and should be re-checked before being quoted externally.
 
 ## TL;DR (5 bullets)
-- **Apple has put a clock on x86-on-Mac.** Apple's Rosetta page says Rosetta "will be available through macOS 27" as a general-purpose tool, after which only "a subset of Rosetta functionality aimed at supporting older unmaintained gaming titles" remains; the macOS 27 beta-8 notes (Aug 31, 2026) state "All Intel-based software will no longer be compatible with macOS 28." Every Wine-based Mac product found (CrossOver-derived builds, Gcenx's WineHQ builds, Sikarugir, Highball, Lithium, soju, WineForge) still ships x86_64 Wine that runs under Rosetta 2. None of the incumbents has shipped an ARM64-native Wine path on macOS even though Wine 10.0 (2025) made ARM64EC "fully supported" and Wine 11.0 (Jan 2026) added ARM64 4K-page emulation on 16K hosts.
-- **The Whisky vacuum was filled by a swarm of small, mostly gaming-only open-source projects in 2025-2026** (Highball 190 stars GPL-3.0 + CC0 database; Mythic 1.4k stars; MetalSharp "Windows games and Windows applications" under a non-commercial license; Silo; Cellar with an AI agent that configures Wine; soju; Playdock; Lithium). Whisky itself is unmaintained (Homebrew deprecated it 2025-04-09) and Kegworks was renamed Sikarugir. None targets professional apps, and D3DMetal (Apple GPTK) is non-redistributable, so they cannot become commercial products without re-plumbing graphics.
-- **The VM incumbents moved on without Intel Macs and without CAD.** Homebrew's cask for Parallels Desktop is at 27.0.1 and is arm64-only with macOS 14+ required; Microsoft's own Windows-on-Mac page still lists only Parallels 18/19/20 as "authorized," warns about DirectX 12 and nested-virtualization limits, and requires a separate Windows 11 Pro license. UTM 4.7.5 (stable) and 5.0.5 (prerelease, "DirectX graphics support for Windows ... experimental") are free; VirtualBox 7.2.16 ships arm64 builds; VMware Fusion has no Homebrew cask anymore and its status could not be verified.
-- **Autodesk shipped AutoCAD 2027 on March 25, 2026 with Windows 11-only, .NET 10, DirectX 12 feature-level 12_0 for "Fast" visual styles; AutoCAD 2027 for Mac is native on Apple silicon, Metal-only (OpenGL removed) and gains the Autodesk Assistant AI.** Autodesk's knowledge base still says ARM Windows hardware is "not compatible with Autodesk products," Desktop Connector does not work in Windows-on-ARM under Parallels, and support is only provided if a bug reproduces on physical hardware. Cloud-streamed Windows 365 is Microsoft's preferred answer and now has a macOS Windows App (macOS 14+).
-- **What nobody is doing:** an ARM64-native Wine runtime for macOS (Rosetta-proof), an open D3D11/D3D12-to-Metal stack that is commercially redistributable (DXMT is LGPL and covers D3D10/11 only; D3DMetal is Apple-private), and any product tuned and supported for professional CAD workflows (licensing/sign-in, Desktop Connector, plotting, plug-ins). That is MIRRORZ's opening.
+
+- **Apple started the clock.** Apple's WWDC25 State of the Union says "macOS Tahoe will be the final release for Intel Macs" [6], and Apple Developer News states macOS 27 is "the final release to support Rosetta" with only a subset kept for "older, unmaintained gaming titles"; macOS 26.4+ shows warnings when a Rosetta app launches [7]. Every free Wine-based Mac tool today (Gcenx builds, Sikarugir, Whisky, Mythic) ships i386/x86_64-only Wine and therefore depends on Rosetta [1][4][25].
+- **CodeWeavers is the only Wine vendor building the post-Rosetta stack.** CrossOver 27 (due "early 2027") drops Intel Macs and 32-bit bottles, and a native ARM64 preview using upstream Wine ARM64EC plus a macOS port of the FEX emulator shipped 31 July 2026 -- still without D3DMetal and with launchers broken [36][37]. Upstream FEX itself lists Linux hosts only [26].
+- **The Whisky vacuum was filled by hobby projects, not a productivity player.** Whisky was archived 11 May 2025 [1]; successors are Sikarugir (Wineskin lineage, mixed LGPL/proprietary, Rosetta required) [4], Mythic (GPL-3 game launcher; its Engine repo was archived 25 Dec 2025) [23][24], and beta wrappers MacWrap and Pixel Port [42]. None targets CAD or business apps.
+- **Incumbents consolidated, not expanded.** Parallels stayed with KKR when Corel was split (announced 26 Feb 2026) [34]; Parallels Desktop 26 (Aug 2025) and 27 (Aug 2026, Apple-silicon-only, Metal-based OpenGL 4.3 driver) are incremental [29][32]; x86 emulation is still a 1-vCPU Windows 10 preview [33]. VMware Fusion Pro is free and shipped 26H1 in May 2026 [41]; UTM 4.7.5 (3 Jan 2026) still has no GPU acceleration for Windows guests [2][28].
+- **The white space is unchanged.** Apple's macOS 27 Virtualization framework gained USB passthrough, DiskImageKit and custom networking but still targets only macOS and Linux guests [5]; Microsoft's Mac authorization page still names Parallels 18-20 on M1-M3 [12]; Autodesk's AutoCAD 2027 for Mac is Metal-only [18], but its Windows requirements list no ARM64 and its KBs call Windows-on-ARM and Parallels unsupported [19][20][21]. Nobody ships a native-ARM64, Rosetta-free, CAD-tuned compatibility layer for professional Windows apps.
 
 ## Current status (version, date, maintainer, momentum)
 
-| Product / project | Current state (verified 2026-09-04) | Maintainer, momentum |
-|---|---|---|
-| Parallels Desktop | Homebrew cask `parallels` = **27.0.1-58670**, `depends_on macos: :sonoma`, `depends_on arch: :arm64`; legacy casks `parallels@14`...`@20` exist. Release date, price and feature list not verifiable (parallels.com blocked). | Parallels GitHub org is active: `pd-ai-agent-core` (Python, updated Aug 31, 2026), `capsule-*` repos (2025-2026), `prl-devops-service` 1.0.5 (2026-07-22, "Fair Source" license, free for up to 10 users with a Business license). |
-| CrossOver (CodeWeavers) | Homebrew cask `crossover` = **26.3.0**. The soju project states it builds from "CodeWeavers' published GPL sources (Wine 11.0, CrossOver 26.3 source drop)". Price and release date not verifiable (codeweavers.com blocked). | CodeWeavers funds DXMT (its LICENSE reads "Copyright (c) 2023-2026 Feifan He for CodeWeavers"). |
-| UTM | **4.7.5** stable (GitHub date "03 Jan"; 2026 inferred because notes cite QEMU 10.0.2 and "Liquid Glass design on *OS 26"); **5.0.5** prerelease ("02 Sep", 2026 by page ordering) adds "DirectX graphics support for Windows ... experimental". Requires macOS 11+. | Open-source, single-maintainer style project, actively shipping. |
-| VirtualBox | Cask **7.2.16** (build 174877) with separate `macOSArm64` and Intel installers. | Oracle. |
-| VMware Fusion | **Not verifiable.** No `vmware-fusion*` cask exists in Homebrew `Casks/v` (only `vagrant-vmware-utility`); Broadcom pages blocked. | Broadcom. |
-| Wine (upstream) | **Wine 11.0** tagged "13 Jan" (2026; notes reference Linux 6.14 NTSync, Vulkan 1.4.335). Wine 10.0 (2025) made ARM64EC fully supported. | WineHQ; Gcenx publishes macOS builds up to **11.16** ("24 Aug", 2026), x86_64/i386 only. |
-| Whisky | README: "Whisky is no longer actively maintained. Apps and games may break at any time." Homebrew `deprecate! date: "2025-04-09", because: :unmaintained`; last release v2.3.5 ("05 Apr", 2025). 15.1k stars. | Dead. |
-| Kegworks -> Sikarugir | Renamed; "successor to Wineskin"; macOS 14+; Apple silicon "require[s] Rosetta2"; tap cask `sikarugir` v1.0.1. README: "This project is not a replacement for CrossOver or Whisky." | Gcenx/VitorMM; alive but positioned as a wrapper builder. |
-| Mythic | v0.6.0 ("27 Dec", 2025), GPL-3.0, 1.4k stars, "custom implementation of Apple's Game Porting Toolkit", macOS 14+. | Active. |
-| Highball | GPL-3.0 app + CC0 compatibility database, 190 stars, Swift, macOS 14+, "no paid tier and never will"; assembles Wine from Gcenx builds with DXMT/DXVK/D3DMetal. | New (2026 activity). |
-| MetalSharp | v0.61.0 (README "Updated: 2026-07-28"), PolyForm Noncommercial, "Run Windows games and Windows applications", custom Wine 11.5 + custom DXMT, macOS 15+, 60 stars. | New. |
-| Silo | LGPL-2.1+, SwiftUI, "Apple GPTK4/D3DMetal + DXMT", macOS 15+, 32 stars. | New. |
-| Cellar | MIT (2026), AI agent (Anthropic/DeepSeek/Kimi key) auto-configures Wine for old games, Apple silicon and Intel. | New. |
-| soju, WineForge, Lithium, Playdock | soju: GPL-3.0 launcher stack from CrossOver 26.3 sources, verified on macOS 26.5/M4 Pro (status 2026-08). WineForge: Wine 11.16 tree focused on D3DMetal/Rosetta. Lithium: Wine x86_64 under Rosetta 2 + DXVK + MoltenVK, no GPTK. Playdock: "built on the Sikarugir engine". | New, small. |
-| Apple `container` / Containerization | Linux containers as lightweight VMs; "supported on macOS 26"; Apple silicon only; release 1.3.1 ("29 Aug", 2026, fixes CVE-2026 IDs). | Apple, active. |
-| Apple Game Porting Toolkit 4 | developer.apple.com: "Download Game Porting Toolkit 4"; evaluation environment "now supports Metal 4"; companion repo `apple/game-porting-toolkit` (Apache-2.0, updated Jun 8, 2026) ships agent skills and requires macOS 27 / Xcode 27. | Apple. |
+| Product | Latest version / date | Maintainer | Momentum and notes |
+|---|---|---|---|
+| Parallels Desktop 26 | Released 26 Aug 2025; supports macOS 26 + Windows 11 25H2; version numbers now track the year/macOS **[search-only]** [29][30] | Parallels (KKR-owned) | Enterprise features (SOC 2, Jamf/MDM); >1M customers, "49% net new ARR growth in 2025" per split press release **[search-only]** [34] |
+| Parallels Desktop 27 | Announced 25 Aug 2026; Apple-silicon-only; new Metal-based graphics driver with OpenGL 4.3; SME acceleration on M4/M5; macOS 27 support **[search-only]** [32] | Parallels | One report says the OpenGL 4.3 driver is not available in Standard edition **[search-only]** [32] |
+| CrossOver 26 | 10 Feb 2026; Wine 11.0, D3DMetal 3.0, DXMT 0.72, VKD3D 1.18 **[search-only]** [35] | CodeWeavers | Still x86_64 (Rosetta) on Mac |
+| CrossOver 27 preview | Native ARM64 macOS preview 31 Jul 2026; release "early 2027"; Sonoma+ and Apple silicon only; 32-bit bottles removed **[search-only]** [36][37] | CodeWeavers | First Rosetta-independent Wine on Mac; preview lacks D3DMetal, D3D12, launcher support, bottle conversion |
+| UTM | v4.7.5, published 3 Jan 2026 (QEMU 10.0.2 backend, Liquid Glass UI, App Intents) **[verified]** [2]; Apache-2.0, repo active (pushed 2 Sep 2026) [3] | osy / community | Free; Windows guests get no GPU acceleration (long-standing issue, virgl OpenGL only for Linux) [28] |
+| VMware Fusion Pro | 26H1 released mid-May 2026 (sources say 14 or 15 May); free for commercial/personal use; 26H1u1 exists **[search-only]** [41] | Broadcom | Maintenance cadence; ARM ESXi connectivity, Secure Boot PK fixes |
+| Whisky | Archived 11 May 2025; "no longer actively maintained" **[verified]** [1] | Isaac Marovitz (ended) | GPL-3.0; built on CrossOver 22.1.1 + GPTK; recommended CrossOver [1][39] |
+| Sikarugir (ex-Kegworks, ex-Wineskin) | Repo active (pushed 4 Sep 2026), 3.6k stars, no GitHub releases (site downloads) **[verified]** [4]; renamed Oct 2025 **[search-only]** [40] | VitorMM, Gcenx (Wine engines), PaulTheTall | Requires macOS 14+ and Rosetta 2 on Apple silicon; D3DMetal toggle; README says it is "not a replacement for CrossOver or Whisky" [4] |
+| Mythic | v0.6.0 pre-release (latest tag); GPL-3.0; macOS 14+ **[verified]** [23]; Engine repo archived 25 Dec 2025, moved to MythicApp/wine [24] | Mythic team | Game launcher (Epic/Steam), GPTK/D3DMetal based |
+| MacWrap / Pixel Port | Free betas (2026) that wrap an .exe into a .app using Wine + GPTK **[search-only]** [42] | Indie | No verifiable pricing/licensing; Apple-silicon, Rosetta-based |
+| Gcenx macOS Wine builds | 11.16 (24 Aug 2026); configured `--enable-archs=i386,x86_64` only **[verified]** [25] | Gcenx | The de-facto Wine binary supply for Sikarugir/hobby wrappers; x86-only |
+| Apple GPTK | Game Porting Toolkit 4 (Metal 4, agentic porting skills) **[verified]** [9] | Apple | Developer-only evaluation environment; not a redistributable runtime |
+| Apple `container` | 1.3.1 (29 Aug 2026), Apache-2.0, macOS 26, Linux containers as lightweight VMs **[verified]** [11] | Apple (open source) | Shows Apple's investment goes to Linux/dev workloads, not Windows |
+| Windows App for macOS | 11.3.9 (3064), published 11 Aug 2026; macOS 14+; Liquid Glass on macOS 26 **[verified]** [15] | Microsoft | The Windows 365 / Cloud PC path; GPU Cloud PC tiers exist [16] |
+| VirtualBuddy | 2.2 beta 4 (27 Aug 2026): USB passthrough needs macOS 27 host and guest **[verified]** [27] | insidegui | macOS/Linux guests only; illustrates new macOS 27 APIs |
 
 ## Pricing and licensing (table)
 
-| Product | Price (verified?) | License / terms |
-|---|---|---|
-| Parallels Desktop 27 | **Not verifiable** (vendor site blocked). | Proprietary. Microsoft: "You need to have a separate license for Windows 11 Pro"; product keys "are platform agnostic (x64 vs Arm)". |
-| CrossOver 26.3 | **Not verifiable.** | Proprietary app over LGPL/GPL Wine; source drops published (used by soju). |
-| UTM 4.7.5 / 5.0.5 | Free download from GitHub releases (cask URL). | Open source on GitHub (license file not fetched). |
-| VirtualBox 7.2.16 | Free download from download.virtualbox.org (cask URL). | Oracle (license not fetched). |
-| Windows 365 Cloud PC | "offered on a per-user, per-month basis"; amounts not fetched. | Business (up to 300 users), Enterprise, Government, Flex, Reserve; "Windows 365 for Agents (preview)". |
-| Whisky | Free. | GPL-3.0; unmaintained. |
-| Sikarugir | Free. | Mixed: `Configure.app` LGPL-2.1; launcher and Creator.app "don't fall under LGPL-2.1"; D3DMetal v3.0 "can not be used for commerial ports". |
-| Highball | Free, "no paid tier and never will". | GPL-3.0 app; CC0 database. |
-| MetalSharp | Free for non-commercial use. | PolyForm Noncommercial 1.0.0. |
-| Mythic | Free. | GPL-3.0. |
-| Silo | Free. | LGPL-2.1+. |
-| Cellar | Free, but "You need an API key to use the AI agent." | MIT. |
-| DXMT | Free. | LGPL-2.1 or later ("for CodeWeavers"). |
-| Apple D3DMetal / GPTK 4 | Free download with Apple ID. | Non-redistributable; soju: "Not included and never will be: Apple D3DMetal/GPTK binaries (non-redistributable)". |
-| AutoCAD 2027 / AutoCAD for Mac 2027 | Subscription; amounts not fetched. | Autodesk virtualization note: "You may virtualize a product only if the applicable terms and conditions ... expressly permit virtualization." |
+| Product | Price (USD) | License / terms | Source status |
+|---|---|---|---|
+| Parallels Desktop 26/27 Standard | $99.99/yr subscription or $219.99 one-time | Proprietary; Windows 11 licence sold separately | [search-only] [31][32] |
+| Parallels Desktop Pro / Business | $119.99/yr; $149.99/yr (subscription only) | Proprietary | [search-only] [31][32] |
+| CrossOver (Mac) | ~$74/yr ("CrossOver+"); CrossOver Life $494 lifetime; promos "from $39.95" | Proprietary wrapper over LGPL Wine; CodeWeavers publishes Wine changes | [search-only] [38] |
+| VMware Fusion Pro | Free (commercial, educational, personal), no key required | Proprietary (Broadcom) | [search-only] [41] |
+| UTM | Free (open source; optional paid App Store build) | Apache-2.0 | [verified] [3] |
+| Whisky | Free | GPL-3.0, archived | [verified] [1] |
+| Sikarugir | Free | Configure.app LGPL-2.1; Launcher and Creator.app proprietary from v1.0.1 | [verified] [4] |
+| Mythic | Free | GPL-3.0 (app); Engine derived from WhiskyWine/Wine LGPL | [verified] [23][24] |
+| Windows 11 Pro licence | Required per VM instance; keys are "platform agnostic (x64 vs Arm)" | Microsoft policy | [verified] [12] |
+| Windows 365 | Per-user, per-month SaaS; GPU tiers (Select/Standard/Super/Max) | Microsoft | [verified] [12][16] |
+| AutoCAD 2027 | Subscription (Autodesk store; price page blocked) | Virtualization only "if the applicable terms ... expressly permit virtualization" | [verified policy text] [19] |
 
 ## How it works (architecture)
 
-**Wine-based entrants (2025-2026).** All of them are x86_64 Wine builds executed under Rosetta 2 on Apple silicon. Gcenx's builds are configured `--build=x86_64-apple-darwin --enable-archs=i386,x86_64`; Sikarugir's cask carries `requires_rosetta`; Lithium describes "Wine (built x86_64, runs under Rosetta 2)"; soju sets `ROSETTA_ADVERTISE_AVX=1` because "D2R's loader requires AVX instructions" and notes that a Rosetta 2 bug "Apple fixed in 26.4" broke Blizzard's anti-cheat on macOS 15. Graphics is a menu of translation layers: WineD3D (DX8 and below), D9VK/DXVK (D3D9-11 via Vulkan/MoltenVK), DXMT (D3D10/11 to Metal, LGPL, CodeWeavers-sponsored), D3DMetal (Apple GPTK, D3D11/12, non-commercial) and vkd3d for D3D12. Sikarugir makes DXMT the default and D3DMetal a toggle; Highball assembles "pinned, SHA-256-verified upstream builds" and chooses a renderer per game from its CC0 database; Silo runs a real Windows Steam client in a shared bottle; Cellar wraps the whole thing in an LLM agent that "researches your game, diagnoses issues, and fixes compatibility problems automatically."
+Three architectures now compete, and the 2025-2026 news sorts cleanly into them.
 
-**VM route.** Parallels 27 (arm64-only) and UTM run Arm64 Windows 11 under Apple's Virtualization/Hypervisor frameworks; x64 apps inside run through Microsoft's Prism emulator (Windows 11 24H2+), which "supports emulation of both x86 and x64 apps," now exposes AVX/AVX2/BMI/FMA/F16C, and offers per-app "Change emulation settings". Prism "only supports user mode code and doesn't support drivers"; kernel drivers must be Arm64. Microsoft's Mac page lists nested-virtualization features (WSL, WSA, Sandbox, VBS) as unsupported and says Arm Windows "has limitations ... including those that rely on DirectX 12". UTM 5.0.5 adds an experimental DirectX-to-Metal (D3DMetal-based) guest driver for Windows on macOS. Apple's `container` project shows the platform direction: each Linux container is its own lightweight VM, using "Rosetta 2 for running linux/amd64 containers on Apple silicon"; macOS 27 "directly integrates support for Intel binary translation, without needing to install Rosetta" for "Intel Linux binaries running in ARM virtual machines (VMs) as well as Intel Linux containers." Note Rosetta explicitly "doesn't translate ... Virtual Machine apps that virtualize x86_64 computer platforms," so x86 Windows VMs on Apple silicon remain pure emulation (UTM/QEMU).
+**1. Full VM running Windows 11 on Arm.** Parallels, Fusion and UTM use Apple's Hypervisor/Virtualization frameworks to boot Arm64 Windows; x86/x64 apps inside the guest run under Microsoft's Prism emulator, which since Windows 11 24H2 exposes AVX/AVX2, BMI, FMA and F16C to x64 apps [13][14]. Kernel-mode drivers must be native Arm64; emulation is user-mode only [13]. Microsoft's Mac page limits the authorized configuration to Parallels 18-20 on M1-M3, notes DirectX 12 limitations, and forbids nested virtualization (WSL, Sandbox, VBS) [12]. Parallels' separate x86_64 emulator (a preview since 20.2 in Jan 2025) boots Intel Windows 10/Server 2022 only, with one vCPU, 8 GB RAM, no USB or sound **[search-only]** [33]. Parallels 27's headline is a Metal-based guest graphics driver reaching OpenGL 4.3 **[search-only]** [32]; UTM still lacks any GPU path for Windows guests [28].
 
-**Apple platform changes.** macOS 26 Tahoe added ASIF sparse disk images "suitable for ... virtual machines storage via the Virtualization framework," Metal 4, and a boot-arg that makes any Rosetta process crash so developers can test Rosetta-free. macOS 27 (beta since Jun 8, 2026; beta 8 on Aug 31, 2026) adds DiskImageKit (Swift APIs for ASIF images for the Virtualization framework), vmnet loopback port forwarding, a Settings list of "Intel-based apps that will be incompatible with macOS 28," does not restore Rosetta after upgrade, launches apps natively even if a user chose "Open using Rosetta," and ships a beta-only command-line switch for "legacy Intel-based games" that "disables Rosetta". GPTK 4 (WWDC 2026 timeframe) pairs a Metal 4 evaluation environment with open-source "agent skills" for Claude Code, Codex and Gemini CLI.
+**2. Translation layer (Wine) with no Windows.** Whisky, Sikarugir, Mythic, MacWrap, Pixel Port and CrossOver run Win32 binaries directly. Today every one of them is an x86_64 Wine process translated by Rosetta, with Direct3D handled by Apple's D3DMetal (from GPTK), DXVK/MoltenVK or DXMT [1][4][24][25]. CodeWeavers' path off Rosetta is Wine's ARM64EC support (Wine 10, Jan 2025) plus a macOS port of FEX for i386/x86-64 emulation, shipped as a CrossOver preview on 31 Jul 2026 **[search-only]** [37]. Upstream FEX remains Linux-only [26], so the macOS port is CodeWeavers' unreleased work.
 
-**Windows on Arm.** Windows 11 Arm64 ISOs are official; 32-bit Arm (AArch32) apps are deprecated and "Support for 32-bit Arm versions of applications is removed in a future release of Windows 11"; the 32-bit edition of Microsoft 365 Apps on Arm stopped feature updates in October 2025 and loses security updates in December 2026; Arm64EC/Arm64X let vendors mix native and emulated code.
+**3. Remote Windows.** Microsoft's Windows App (macOS 11.3.9, Aug 2026) fronts Windows 365 Cloud PCs, including NVIDIA GPU tiers that support nested virtualization only on non-GPU SKUs [15][16]. Microsoft's own Mac guidance leads with Windows 365 before Parallels [12].
+
+**Apple platform changes that matter.** WWDC26 session 224 adds to the macOS 27 Virtualization framework: automated macOS guest provisioning, USB accessory passthrough (hot-plug), vmnet-based custom topologies and port forwarding, DiskImageKit with ASIF base/cache/overlay layers (copy-on-write clones), custom Virtio devices and EFI Secure Boot for Linux -- and mentions no Windows guests and no Rosetta-in-VM changes [5]. Apple's `container` tool (macOS 26) runs Linux containers as lightweight VMs [10][11]. GPTK 4 adds Metal 4 and agentic porting skills but remains a developer evaluation environment [9].
 
 ## Feature checklist (table: feature | status | notes)
 
-| Feature | Status across the field | Notes |
+| Feature | Status across the field (Sep 2026) | Notes |
 |---|---|---|
-| ARM64-native Wine on macOS (no Rosetta) | **Nobody ships it** | Wine 10.0: "The ARM64EC architecture is fully supported"; Wine 11.0: ARM64 4K-page simulation on 16K hosts; all Mac builds remain x86_64. |
-| D3D12 without Apple's D3DMetal | Partial | vkd3d/MoltenVK path exists (soju: "Graphics itself can run on pure open-source vkd3d/MoltenVK if D3DMetal is absent"); DXMT "does not provide D3D12 support." |
-| D3D10/11 to Metal, redistributable | Yes | DXMT, LGPL-2.1+. |
-| Commercial redistribution of D3DMetal | No | Sikarugir: D3DMetal v3.0 license "can not be used for commerial ports." |
-| Windows 11 Arm VM on Apple silicon | Yes (Parallels, UTM, VirtualBox arm64) | Microsoft authorizes Parallels 18/19/20 by name only; nested virtualization, WSL/WSA, DirectX 12 limits. |
-| x86 Windows VM on Apple silicon | Emulation only | Rosetta does not translate x86 VM apps; UTM/QEMU emulation. |
-| Intel Mac support | Shrinking | Parallels 27 cask arm64-only; AutoCAD 2027 for Mac still lists "64-bit Intel CPU"; macOS 28 drops Intel software. |
-| AI-assisted configuration | Emerging | Cellar (agent configures Wine); Parallels `pd-ai-agent-core`; Apple GPTK agent skills; AutoCAD 2027 "Autodesk Assistant". |
-| Open compatibility database | Yes (games) | Highball's CC0 `highball-db`; nothing equivalent for professional apps. |
-| Professional CAD support/certification | **None** | Autodesk: ARM Windows "not compatible"; Desktop Connector fails in Parallels ARM; support requires physical-hardware repro. |
-| Cloud Windows for Mac | Yes | Windows 365 via Windows App (macOS 14+ for W365); W365 "supports nested virtualization". |
+| Native ARM64 host binary, no Rosetta | Parallels/Fusion/UTM: yes (VMs). Wine family: only CrossOver 27 preview | Whisky, Sikarugir, Mythic, Gcenx builds are i386/x86_64 [1][4][25] |
+| x86-64 Windows app execution on Apple silicon | VMs via Prism inside Arm Windows; Wine via Rosetta; CrossOver preview via FEX+ARM64EC | Parallels' own x86 emulator: Win10 only, 1 vCPU **[search-only]** [33] |
+| DirectX 11/12 | VMs: DX11 class in Parallels, DX12 "limitations" per Microsoft [12]; Wine: D3DMetal (GPTK) covers D3D9-12 [24] | CrossOver ARM64 preview has no D3DMetal yet **[search-only]** [37] |
+| OpenGL 4.x in guest | Parallels 27 claims 4.3 via Metal driver (Pro+) **[search-only]** [32]; UTM virgl only for Linux [28] | Relevant to legacy CAD/GIS |
+| Metal-native rendering path for pro apps | Only native Mac apps (AutoCAD for Mac 2027 is Metal-only) [18] | No compatibility layer exposes Metal features to Windows apps |
+| USB / peripheral passthrough | Parallels: yes; Apple VZ framework: new in macOS 27 [5]; Parallels x86 emulator: no [33] | Dongles/plotters matter for CAD shops |
+| Windows licence required | VMs: yes, per instance [12]; Wine family: no | Cost and admin gap Wine can exploit |
+| Microsoft-authorized Windows-on-Mac | Parallels 18-20 on M1-M3 only [12] | Page not updated for PD 26/27 or M4/M5 |
+| CAD-vendor support statement | Autodesk: Parallels "no longer supported" for AutoCAD since 2013 release [21]; ARM-based Windows unsupported [20] | Support liability sits with the user |
+| Enterprise management (MDM, SOC 2) | Parallels 26 **[search-only]** [29]; Windows 365 native | Open-source tools: none |
+| Open-source core | UTM (Apache-2.0), Whisky (GPL-3), Mythic (GPL-3), Sikarugir (mixed), Wine (LGPL) | CrossOver/Parallels/Fusion proprietary |
+| Rosetta dependency after macOS 27 | Fatal for all x86_64 Wine wrappers; VMs unaffected | Apple keeps only a gaming subset [7] |
+| Post-Rosetta status of Linux-VM Rosetta | Apple engineer: "a different use case" from app translation, no commitment [8] | Watch item |
 
 ## CAD / AutoCAD relevance
 
-- **AutoCAD 2027 (Windows), release notes dated March 25, 2026:** OS "64-bit Microsoft Windows 11" only (AutoCAD 2025 still allowed Windows 10 1809+); ".NET 10"; basic 16 GB RAM; "DirectX 12 with Feature Level 12_0 is required for 'Fast' visual styles"; basic GPU "DirectX 11 compliant". The 2027 page no longer prints the sentence "ARM Processors are not supported" that appears on the AutoCAD 2025 and AutoCAD LT 2027 pages; treat this as an unexplained wording change, not as ARM support, because Autodesk's KB still says Windows-on-ARM hardware "is not compatible with Autodesk products."
-- **AutoCAD 2027 for Mac:** macOS 14/15/26, "64-bit Intel CPU / Apple M series CPU", "Beginning with AutoCAD for Mac 2027, OpenGL is no longer supported. Metal is now the sole graphics engine," plus Autodesk Assistant, Smart Blocks and Geometry Cleanup. Autodesk's own comparison says Mac products "are not straight 1:1 ports" and lack e.g. QuickCalc, block-table lookup and the Classic toolbar UI, which is why Windows AutoCAD on a Mac still matters (Specialized Toolsets are "Windows Only").
-- **Virtualization posture:** "Autodesk provides technical support to make sure that your software works properly, but doesn't provide technical support for your virtual environment"; Parallels-specific KBs cover selection lag ("Change Hypervisor from Apple to Parallels"), installer "Error 10" (needs Rosetta 2 and x64/x86/ARM64 VC++ redistributables) and Desktop Connector not working on Windows ARM.
-- **Implication for MIRRORZ:** the flagship target needs D3D11 at minimum and D3D12 FL12_0 for the fast visual styles, .NET 10 on Windows, and Autodesk's sign-in/licensing stack; none of the 2025-2026 entrants tests any of this, and the VM incumbents hand support problems back to Autodesk, who hands them back to the hypervisor vendor.
+- **AutoCAD 2027 shipped 25 Mar 2026** (release notes dated) [17]. The Mac edition removed OpenGL and made Metal the sole graphics engine, added Autodesk Assistant and Smart Blocks, and supports macOS 14/15/26 on Intel or M-series [18][19]. This raises the bar: a Windows-AutoCAD-on-Mac product must at least match a native Metal app's 2D/3D responsiveness.
+- **Windows AutoCAD 2027 requirements list "64-bit Microsoft Windows 11", DirectX 12 feature level 12_0 for "Fast" visual styles, .NET 10** -- and do not mention ARM64 [19]. A third-party guide claims AutoCAD 2026 supports Snapdragon ARM64 natively **[search-only, conflicts with official pages]** [44]; Autodesk's own KB says Windows-on-ARM installs are "unsupported hardware" [20] and Desktop Connector does not work in Parallels on Apple silicon [22]. Treat ARM-native AutoCAD as unconfirmed.
+- **Autodesk's virtualization stance is a liability shield**: products may be virtualized only where the licence "expressly permit[s] virtualization" and Autodesk "makes no representations, warranties or other promises" [19]. The Parallels KB says support for AutoCAD within Parallels ended with the 2013 release [21]. MIRRORZ cannot expect vendor blessing; it must earn trust through published compatibility evidence.
+- **Toolsets are Windows-only** (Map 3D, Electrical, Plant 3D, MEP, Mechanical) [19]: this is the concrete reason Mac users still need Windows AutoCAD, and the Windows-only toolset list is where a Wine-based product can differentiate from AutoCAD for Mac.
+- **Parallels 27's OpenGL 4.3 Metal driver is the first incumbent feature explicitly aimed at "GIS, CAD-adjacent, 3D and engineering workflows"** **[search-only]** [32]; it is gated to Pro/Business and still runs AutoCAD x64 under Prism inside an Arm VM with Microsoft-documented DX12 limits [12].
 
 ## Strengths (what to match)
 
-- **Highball:** verifiable, reproducible engines ("pinned, SHA-256-verified upstream builds") and a CC0 evidence database with "provenance on every claim" - copy this rigor for CAD workflows.
-- **Silo / MetalSharp:** automatic per-title renderer selection between D3DMetal and DXMT, bundled custom Wine, self-updating from GitHub releases, and (MetalSharp) explicit "Windows applications" scope.
-- **Cellar:** LLM-driven diagnosis of Wine failures is a genuinely new UX; MIRRORZ can do the same with a curated CAD recipe set.
-- **Parallels:** the only route with a Microsoft-authorized Windows license story, Business-tier devops tooling, and an AI agent library in the open.
-- **UTM:** free, open, Apple-Virtualization-native, and now experimenting with a DirectX guest driver.
-- **Apple `container`/DiskImageKit/ASIF:** the sanctioned, fast VM plumbing on macOS 26/27; MIRRORZ should use ASIF images and the Virtualization framework if it ever needs a VM fallback.
+- **CodeWeavers' engineering roadmap**: ARM64EC + FEX gives a Rosetta-free future and macOS 27-proof foundation; CodeWeavers funds upstream Wine, which makes its stack the reference implementation to track [36][37].
+- **Parallels' enterprise polish**: MDM/Jamf deployment, SOC 2, Microsoft authorization, per-year versioning aligned with macOS, and now a Metal-backed OpenGL 4.3 driver **[search-only]** [29][32].
+- **Zero-cost baselines**: Fusion Pro is free and UTM is Apache-2.0; any paid product must beat "free VM + your own Windows licence" on convenience and performance [3][41].
+- **Apple's new primitives**: DiskImageKit ASIF overlays (instant clones, shared read-only base images), USB passthrough, vmnet port forwarding and guest provisioning are free building blocks in macOS 27 [5].
+- **D3DMetal quality**: every Wine-based Mac tool rides Apple's D3DMetal for DirectX 9-12; matching that means using it (GPTK terms) or shipping DXMT/DXVK+MoltenVK [24].
 
 ## Weaknesses (what MIRRORZ must beat)
 
-- **Rosetta dependence is the shared Achilles heel.** Every Wine-on-Mac product is x86_64 under Rosetta 2, and Apple says general-purpose Rosetta ends after macOS 27 with only a games subset surviving; macOS 27 already stops auto-restoring Rosetta and forces native launch. A product that ships ARM64EC Wine plus an x86 user-mode emulator (Wine 10.0 documents the `HKLM\Software\Microsoft\Wow64\amd64` emulator interface implemented by FEX) is the only durable path.
-- **Graphics licensing.** D3DMetal is non-commercial and non-redistributable; the open alternatives cover D3D10/11 (DXMT) and Vulkan-based D3D9-12 (DXVK/vkd3d over MoltenVK). AutoCAD's D3D12 FL12_0 "Fast" styles will need vkd3d-over-MoltenVK work or a Metal 4 backend.
-- **Scope.** Highball, Mythic, Silo, soju, Playdock, Lithium and WineForge are games-only; Whisky is dead; Sikarugir disclaims being a CrossOver/Whisky replacement; MetalSharp cannot be used commercially.
-- **VM route is officially unsupported for CAD and still Arm-Windows constrained** (DirectX 12 caveats, no nested virtualization, Desktop Connector broken, separate Windows license, Microsoft's page stale at Parallels 20).
-- **Cloud route** requires an organization tenant ("Windows 365 isn't currently available for individuals") and a network.
+- **Rosetta cliff**: Whisky (dead), Sikarugir, Mythic, MacWrap and Pixel Port all die with general-purpose Rosetta after macOS 27 unless they rebuild on ARM64EC; none has announced it [1][4][7][25].
+- **Games-first focus**: every Wine newcomer markets Steam/Epic gaming; nobody validates productivity workflows (dialogs, printing/plotting, licensing daemons, .NET 10, Access runtime) that AutoCAD needs [19][23][42].
+- **CrossOver 27 preview gaps**: no D3DMetal, no D3D12, broken launchers, no bottle migration, and a stated "early 2027" release **[search-only]** [37]. A 6-12 month window exists.
+- **VM friction**: Windows licence per instance, no Microsoft authorization beyond Parallels 18-20/M1-M3, DX12 limits, nested-virt bans [12]; Parallels x86 emulator is Windows 10, 1 vCPU **[search-only]** [33]; UTM has no Windows GPU path [28].
+- **Vendor support vacuum**: Autodesk disclaims virtualization and ARM [19][20][21]; Microsoft's authorization page is stale [12]. No incumbent publishes AutoCAD-specific compatibility data.
+- **Incumbents' attention is elsewhere**: Parallels is being repositioned as a standalone KKR asset (split announced Feb 2026, expected close May 2026) **[search-only]** [34]; Apple's virtualization roadmap is macOS/Linux/containers [5][10]; Broadcom ships Fusion as a free maintenance product [41].
 
 ## Reusable code, ideas, and license implications for MIRRORZ
 
-- **Wine 11.x (LGPL-2.1+)**: base runtime; ARM64EC + FEX interface is upstream. Shipping modified Wine requires publishing source for LGPL components; proprietary UI/launcher layers are fine (CrossOver, Sikarugir and Silo all do this).
-- **DXMT (LGPL-2.1+)**: D3D10/11 to Metal; safe to bundle with source offer. **DXVK (Zlib per Highball's summary), MoltenVK, vkd3d** for the D3D9/12 gaps.
-- **D3DMetal / GPTK 4**: do not bundle; at most detect a user-supplied GPTK like Silo ("imports Apple's Game Porting Toolkit from your `.dmg`").
-- **Highball's CC0 `highball-db`**: model for an open "verified runs" database; CC0 means MIRRORZ can copy the schema and seed data freely.
-- **soju (GPL-3.0)**: reference for launcher/login fixes (CEF renderer, `ROSETTA_ADVERTISE_AVX`, D3DMetal payload layout); GPL means learn from it, do not link it into proprietary code.
-- **Gcenx macOS_Wine_builds / macports-wine**: proven build recipe and dependency list (MoltenVK, GStreamer 1.28.5, llvm-mingw); builds are x86_64-only, so MIRRORZ must add an arm64 build lane.
-- **Sikarugir**: LGPL `Configure.app` reusable; launcher/Creator are not LGPL - avoid.
-- **MetalSharp**: PolyForm Noncommercial - study only, no reuse.
-- **Apple `container`/Containerization (Apple GitHub, open source)**: pattern for sub-second VM boot, ASIF images, Rosetta directory share, and DiskImageKit on macOS 27 if MIRRORZ adds a "real Windows" VM fallback.
-- **Apple GPTK agent skills (Apache-2.0)**: reuse the Metal 4/MetalFX knowledge base for MIRRORZ's own agent-assisted porting of CAD graphics.
+- **Wine (LGPL-2.1+)**: usable in a commercial product if Wine modifications are published; proprietary UI/launcher can stay closed (CodeWeavers and Sikarugir both do this) [4][38]. Track upstream ARM64EC work; do not build on Gcenx x86_64-only builds for the long term [25].
+- **FEX (MIT)**: permissive; upstream is Linux-only, so a macOS port is real engineering (CodeWeavers has not published theirs as of the preview) [26][37]. MIT allows a closed fork, but contributing back reduces maintenance cost.
+- **Whisky (GPL-3.0, archived)**: SwiftUI bottle-management UI and GPTK integration patterns are reusable only under GPL-3 -- copying code forces MIRRORZ's app to be GPL; study, do not copy [1].
+- **Mythic (GPL-3.0) / Mythic Engine (Wine LGPL derivative of WhiskyWine)**: same GPL caveat for the app; Engine build scripts are LGPL-derived and informative for D3DMetal packaging [23][24].
+- **Sikarugir Configure.app (LGPL-2.1)**: winetricks-style prefix configuration logic; Launcher/Creator are proprietary and off-limits [4].
+- **UTM (Apache-2.0)**: permissive; its Apple Virtualization backend, QEMU packaging, and App Intents automation are reusable for a VM fallback mode [3].
+- **Apple `container`/Containerization (Apache-2.0)**: reference implementation of Virtualization framework, vmnet and ASIF usage in Swift [11].
+- **GPTK / D3DMetal**: Apple's evaluation environment is developer-only; redistribution terms are not published on the page [9]. Assume D3DMetal cannot be bundled without an Apple agreement; plan for DXMT/DXVK+MoltenVK as the shippable path, as CrossOver 26 does with DXMT **[search-only]** [35].
+- **Ideas to copy**: year-based versioning aligned to macOS (Parallels 26/27); publishing per-app compatibility ratings (CrossOver); ASIF overlay images for instant per-app sandboxes (macOS 27 DiskImageKit) [5]; Metal-backed OpenGL 4.3 as an explicit CAD feature **[search-only]** [32].
 
 ## Open questions
 
-1. Exact release dates, prices and feature lists of Parallels Desktop 26/27 and CrossOver 25/26 (vendor sites blocked); whether Parallels 27 really dropped Intel Macs (cask says arm64-only).
-2. VMware Fusion's status under Broadcom in 2025-2026 (no cask, no reachable page).
-3. Has CodeWeavers or anyone shipped an ARM64EC Wine build for macOS, and does FEX/Box64 work under Apple's `%gs` swap and 16K pages? (Wine 11.0 notes: "Using a 4K-page kernel is strongly recommended.")
-4. Does AutoCAD 2027's removal of the "ARM Processors are not supported" sentence signal an upcoming Windows-on-Arm build, which would change the VM route's economics?
-5. What exactly survives in Apple's post-macOS-27 "subset of Rosetta functionality" for games, and can a Wine-based CAD product qualify?
-6. Will Microsoft update its Windows-on-Mac authorization page beyond Parallels 20 / M3, and will Windows 365 open to individuals?
+1. Will CodeWeavers publish its macOS FEX port under MIT, and when will D3DMetal land in the ARM64 build? (codeweavers.com blocked; verify.)
+2. Does Apple keep Rosetta for Linux VMs after macOS 27? Apple staff called it "a different use case" without commitment [8].
+3. Is AutoCAD 2026/2027 actually ARM64-native on Windows? Autodesk's official pages do not say so [19][20]; the claim comes from a third-party site [44].
+4. Exact Parallels 27 release date and whether OpenGL 4.3 is Pro-only (press release and windowsforum blocked) [32].
+5. VMware Fusion 26H1 exact release date (14 vs 15 May 2026 in different snippets) and any Apple-silicon-specific Windows changes [41].
+6. Whether Microsoft will refresh the Mac authorization page for Parallels 26/27 and M4/M5 [12].
+7. Pricing/licensing of MacWrap and Pixel Port, and whether either has a productivity roadmap [42].
+8. Whether GPTK 4's D3DMetal licence permits third-party redistribution [9].
 
 ## Sources (numbered list of URLs with dates)
-1. https://developer.apple.com/documentation/apple-silicon/about-the-rosetta-translation-environment (Apple docs JSON, fetched 2026-09-04)
-2. https://developer.apple.com/documentation/macos-release-notes/macos-27-release-notes ("macOS 27 Golden Gate Beta 8 Release Notes"; beta 8 dated Aug 31, 2026 in Apple's releases RSS)
-3. https://developer.apple.com/documentation/macos-release-notes/macos-26-release-notes (fetched 2026-09-04)
-4. https://developer.apple.com/news/releases/rss/releases.rss (items: macOS 27.0 beta Jun 8, 2026; macOS 26.6.2 Aug 17, 2026; Xcode 27 beta 6 Aug 24, 2026; macOS 27.0 beta 8 Aug 31, 2026)
-5. https://developer.apple.com/documentation/virtualization (fetched 2026-09-04)
-6. https://developer.apple.com/games/game-porting-toolkit/ (fetched 2026-09-04)
-7. https://github.com/apple/game-porting-toolkit (README; repo updated Jun 8, 2026)
-8. https://github.com/apple/container and https://github.com/apple/containerization (READMEs; release 1.3.1 "29 Aug", 2026)
-9. https://raw.githubusercontent.com/wine-mirror/wine/wine-11.0/ANNOUNCE.md and https://github.com/wine-mirror/wine/releases/tag/wine-11.0 (tag "13 Jan"; 2026)
-10. https://raw.githubusercontent.com/wine-mirror/wine/wine-10.0/ANNOUNCE.md (Wine 10.0, 2025)
-11. https://github.com/Gcenx/macOS_Wine_builds (README; releases 11.16 "24 Aug" and 11.0_1 "16 Apr", 2026)
-12. https://github.com/Whisky-App/Whisky (README maintenance notice; v2.3.5 "05 Apr", 2025) and https://raw.githubusercontent.com/Homebrew/homebrew-cask/master/Casks/w/whisky.rb (deprecated 2025-04-09)
-13. https://github.com/Kegworks-App/Kegworks (redirects to Sikarugir README) and https://raw.githubusercontent.com/Sikarugir-App/homebrew-sikarugir/main/Casks/sikarugir.rb (v1.0.1)
-14. https://github.com/3Shain/dxmt (README and LICENSE, 2023-2026)
-15. https://github.com/topics/game-porting-toolkit and https://github.com/topics/wine?o=desc&s=updated (fetched 2026-09-04)
-16. https://github.com/gauthierpiarrette/highball (fetched 2026-09-04)
-17. https://github.com/metalsharp/MetalSharp (README "Updated: 2026-07-28")
-18. https://github.com/mikaelhug/Silo, https://github.com/lasermaze/Cellar, https://github.com/Alien4042x/WineForge, https://github.com/kaangiray26/lithium (READMEs/LICENSEs, fetched 2026-09-04)
-19. https://github.com/BCD1210/soju (README, "Status (2026-08)")
-20. https://github.com/MythicApp/Mythic (v0.6.0 "27 Dec", 2025)
-21. https://raw.githubusercontent.com/Homebrew/homebrew-cask/master/Casks/p/parallels.rb (27.0.1-58670, fetched 2026-09-04)
-22. https://raw.githubusercontent.com/Homebrew/homebrew-cask/master/Casks/c/crossover.rb (26.3.0)
-23. https://raw.githubusercontent.com/Homebrew/homebrew-cask/master/Casks/u/utm.rb (4.7.5) and https://github.com/utmapp/UTM/releases/tag/v4.7.5, /v5.0.5
-24. https://raw.githubusercontent.com/Homebrew/homebrew-cask/master/Casks/v/virtualbox.rb (7.2.16) and https://github.com/Homebrew/homebrew-cask/tree/master/Casks/v (no vmware-fusion cask)
-25. https://github.com/orgs/Parallels/repositories and https://github.com/Parallels/prl-devops-service (README; CHANGELOG 1.0.5 dated 2026-07-22)
-26. https://support.microsoft.com/en-us/windows/options-for-using-windows-11-with-mac-computers-with-apple-m1-m2-and-m3-chips-cd15fd62-9b34-4b78-b0bc-121baa3c568c (fetched 2026-09-04)
-27. https://learn.microsoft.com/windows/arm/apps-on-arm-x86-emulation and https://learn.microsoft.com/windows/arm/apps-on-arm-program-compat-troubleshooter (Prism)
-28. https://learn.microsoft.com/microsoft-365-apps/end-of-support/end-of-support-32bit-arm (Oct 2025 / Dec 2026 dates)
-29. https://learn.microsoft.com/windows/arm/arm32-to-arm64 and https://learn.microsoft.com/windows/whats-new/deprecated-features
-30. https://learn.microsoft.com/windows/arm/iso and https://learn.microsoft.com/en-us/windows/arm/add-arm-support
-31. https://learn.microsoft.com/windows-app/get-started-connect-devices-desktops-apps and https://learn.microsoft.com/windows-365/overview
-32. https://learn.microsoft.com/en-us/windows/whats-new/whats-new-windows-11-version-25h2 (WSUS availability Oct 14, 2025)
-33. https://learn.microsoft.com/answers/a/12344798 (community answer on Oct 2025 Prism changes; low confidence)
-34. https://help.autodesk.com/view/ACD/2027/ENU/?guid=AUTOCAD_2027_RELEASE_NOTES (March 25, 2026)
-35. https://help.autodesk.com/view/ACDMAC/2027/ENU/?guid=AUTOCAD_MAC_2027_RELEASE_NOTES (March 25, 2026) and https://help.autodesk.com/view/ACDMAC/2027/ENU/?guid=GUID-81FF4C76-6077-4D2B-9081-250BDBEA645D
-36. https://www.autodesk.com/support/technical/article/caas/sfdcarticles/sfdcarticles/System-requirements-for-AutoCAD-2027-including-Specialized-Toolsets.html
-37. https://www.autodesk.com/support/technical/article/caas/sfdcarticles/sfdcarticles/System-requirements-for-AutoCAD-2025-including-Specialized-Toolsets.html and .../System-requirements-for-AutoCAD-LT-2027.html
-38. https://www.autodesk.com/support/technical/article/caas/sfdcarticles/sfdcarticles/Surface-Pro-X-and-Windows-running-on-ARM-processors-WoA.html
-39. https://www.autodesk.com/support/technical/article/caas/sfdcarticles/sfdcarticles/Is-Desktop-Connector-working-on-Windows-running-on-iOS-using-Parallels-with-ARM64.html
-40. https://www.autodesk.com/support/technical/article/caas/sfdcarticles/sfdcarticles/Selection-in-AutoCAD-products-lags-for-several-seconds-on-Apple-Mac-computer-with-Parallels-running-Windows.html
-41. https://www.autodesk.com/support/technical/article/caas/sfdcarticles/sfdcarticles/Install-error-The-install-couldn-t-finish-Error-10-when-installing-Autodesk-products.html
-42. https://www.autodesk.com/support/technical/article/caas/sfdcarticles/sfdcarticles/Does-Inventor-support-running-on-virtual-machines.html (virtualization support policy wording)
-43. https://www.autodesk.com/support/technical/article/caas/sfdcarticles/sfdcarticles/Compare-Features-AutoCAD-for-Windows-vs-AutoCAD-for-Mac.html
-44. https://www.autodesk.com/support/technical/article/caas/sfdcarticles/sfdcarticles/Autodesk-Fusion-crashes-on-startup-in-Windows-on-ARM.html
+
+Fetched and verified (accessed 2026-09-05):
+1. https://github.com/Whisky-App/Whisky -- archived 2025-05-11; GPL-3.0; "no longer actively maintained".
+2. https://github.com/utmapp/UTM/releases/tag/v4.7.5 -- v4.7.5 published 3 Jan (2026 per GitHub current-year display).
+3. https://github.com/utmapp/UTM -- Apache-2.0; pushed 2026-09-02 (repo metadata via GitHub API).
+4. https://github.com/Sikarugir-App/Sikarugir -- README: macOS 14+, Rosetta 2 required, mixed licensing; pushed 2026-09-04.
+5. https://developer.apple.com/videos/play/wwdc2026/224/ -- WWDC26 "Expand the capabilities of your Virtualization app" (June 2026).
+6. https://developer.apple.com/videos/play/wwdc2025/102/ -- WWDC25 Platforms State of the Union transcript (9 June 2025).
+7. https://developer.apple.com/news/?id=w5ngl9k2 -- "Upcoming changes to Rosetta support" (page dated 1 Sep 2026).
+8. https://developer.apple.com/forums/thread/787530 -- Apple DTS/Frameworks engineer replies on Rosetta after macOS 27.
+9. https://developer.apple.com/games/game-porting-toolkit/ -- Game Porting Toolkit 4 (2026).
+10. https://developer.apple.com/videos/play/wwdc2025/346/ -- "Meet Containerization" (June 2025).
+11. https://github.com/apple/container -- Apache-2.0; macOS 26; releases 1.3.1 (29 Aug 2026), 1.3.0, 1.2.2.
+12. https://support.microsoft.com/windows/options-for-using-windows-11-with-mac-computers-with-apple-m1-m2-and-m3-chips-cd15fd62-9b34-4b78-b0bc-121baa3c568c -- Microsoft policy page (undated; fetched 2026-09-05).
+13. https://learn.microsoft.com/windows/arm/apps-on-arm-x86-emulation -- Prism emulator (Windows 11 24H2).
+14. https://learn.microsoft.com/windows/arm/apps-on-arm-program-compat-troubleshooter -- AVX/AVX2 and per-app emulation settings.
+15. https://learn.microsoft.com/windows-app/whats-new?tabs=macos -- Windows App macOS 11.3.9 (11 Aug 2026).
+16. https://learn.microsoft.com/windows-365/enterprise/gpu-cloud-pc -- GPU Cloud PC tiers.
+17. https://help.autodesk.com/view/ACD/2027/ENU/?guid=AUTOCAD_2027_RELEASE_NOTES -- dated 25 Mar 2026.
+18. https://help.autodesk.com/view/ACDMAC/2027/ENU/?guid=GUID-81FF4C76-6077-4D2B-9081-250BDBEA645D -- What's New in AutoCAD for Mac 2027 (OpenGL removed, Metal sole engine).
+19. https://www.autodesk.com/support/technical/article/caas/sfdcarticles/sfdcarticles/System-requirements-for-AutoCAD-2027-including-Specialized-Toolsets.html -- Windows and Mac requirements; virtualization disclaimer.
+20. https://www.autodesk.com/support/technical/article/caas/sfdcarticles/sfdcarticles/Surface-Pro-X-and-Windows-running-on-ARM-processors-WoA.html -- ARM64 Windows "unsupported hardware".
+21. https://www.autodesk.com/support/technical/article/caas/sfdcarticles/sfdcarticles/Cursor-and-display-performance-issues-with-AutoCAD-within-Parallels-Desktop.html and https://www.autodesk.com/support/technical/article/caas/sfdcarticles/sfdcarticles/AutoCAD-Mac-won-t-launch-when-running-AutoCAD-within-Parallels.html -- Parallels not supported since AutoCAD 2013.
+22. https://www.autodesk.com/support/technical/article/caas/sfdcarticles/sfdcarticles/Is-Desktop-Connector-working-on-Windows-running-on-iOS-using-Parallels-with-ARM64.html
+23. https://github.com/MythicApp/Mythic and https://github.com/MythicApp/Mythic/releases -- GPL-3.0; macOS 14+; v0.6.0 pre-release.
+24. https://github.com/MythicApp/Engine -- archived 25 Dec 2025; WhiskyWine derivative.
+25. https://github.com/Gcenx/macOS_Wine_builds and /releases -- 11.16 (24 Aug 2026); `--enable-archs=i386,x86_64`.
+26. https://github.com/FEX-Emu/FEX -- MIT; Linux hosts.
+27. https://github.com/insidegui/VirtualBuddy/releases -- 2.2 beta 4 (27 Aug 2026), USB passthrough requires macOS 27.
+28. https://github.com/utmapp/UTM/issues/4285 -- guest OpenGL limits (closed via PR #7576).
+
+Search-result snippets only (page blocked by research proxy; unverified):
+29. https://www.parallels.com/blogs/parallels-desktop-26/ (26 Aug 2025).
+30. https://9to5mac.com/2025/08/26/parallels-desktop-26-brings-macos-26-support-and-new-tools-for-it/ (26 Aug 2025).
+31. https://www.parallels.com/products/desktop/buy/ and https://www.macworld.com/article/668146/parallels-desktop-review.html (2025-2026 pricing).
+32. https://www.parallels.com/newsroom/news/press-releases/20260825-parallels-desktop-27/ ; https://9to5mac.com/2026/08/29/parallels-desktop-27/ ; https://windowsforum.com/windows-news.4/parallels-desktop-27-opengl-4-3-requires-pro-edition.443518/ (Aug 2026).
+33. https://kb.parallels.com/130217 -- x86 emulator limitations (Win10/Server 2022, 1 vCPU, 8 GB, no USB/sound).
+34. https://www.parallels.com/newsroom/news/press-releases/20260226-corel-announcement/ ; https://www.heise.de/en/news/Corel-to-be-split-Parallels-remains-with-KKR-11217943.html (26 Feb 2026).
+35. https://www.codeweavers.com/blog/mjohnson/2026/2/10/crossover-26-cures-artificial-incompatibility-with-windows-games-on-mac ; https://www.phoronix.com/news/CrossOver-26 (10 Feb 2026).
+36. https://www.codeweavers.com/blog/mjohnson/2026/6/11/whats-in-and-whats-out-for-crossover-27 (11 Jun 2026).
+37. https://www.codeweavers.com/blog/mjohnson/2026/7/31/crossover-preview-the-right-to-bear-arm64-on-mac ; https://appleinsider.com/articles/26/07/31/first-apple-silicon-native-crossover-build-in-testing-as-rosettas-end-nears (31 Jul 2026).
+38. https://www.codeweavers.com/store/ (pricing, 2026).
+39. https://appleinsider.com/articles/25/04/16/whisky-development-ends-on-macos-to-help-wine-flourish (16 Apr 2025).
+40. https://machow2.com/kegworks-officially-renamed-to-sikarugir/ (Oct 2025).
+41. https://techdocs.broadcom.com/us/en/vmware-cis/desktop-hypervisors/fusion-pro/26H1/release-notes/vmware-fusion-26h1-release-notes.html ; https://blogs.vmware.com/cloud-foundation/2026/05/14/announcing-vmware-workstation-and-fusion-26h1/ (May 2026).
+42. https://macwrap.app/ ; https://pixelport.gg/blog/whisky-is-dead-what-replaces-it/ (2026).
+43. https://www.macrumors.com/2026/02/16/macos-tahoe-26-4-rosetta-2-warnings/ (16 Feb 2026).
+44. https://unanswered.io/guide/does-autocad-run-on-arm-processors (undated; claim conflicts with Autodesk KB).
