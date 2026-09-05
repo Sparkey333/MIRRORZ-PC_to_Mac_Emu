@@ -82,11 +82,17 @@ class Sock {
     const queued = this.queue.shift();
     if (queued) return Promise.resolve(queued);
     return new Promise((resolve, reject) => {
-      const t = setTimeout(() => reject(new Error('timeout waiting for a message')), timeoutMs);
-      this.waiters.push((m) => {
+      const waiter = (m: Msg) => {
         clearTimeout(t);
         resolve(m);
-      });
+      };
+      const t = setTimeout(() => {
+        // Drop the stale waiter so a later message is queued instead of swallowed (expectNone relies on this).
+        const i = this.waiters.indexOf(waiter);
+        if (i >= 0) this.waiters.splice(i, 1);
+        reject(new Error('timeout waiting for a message'));
+      }, timeoutMs);
+      this.waiters.push(waiter);
     });
   }
 
