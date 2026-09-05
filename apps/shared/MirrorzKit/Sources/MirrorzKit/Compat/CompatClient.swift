@@ -212,7 +212,10 @@ public actor CompatClient {
         // The list endpoint returns { version, apps }; presets and runtime descriptions come
         // from /v1/compat/presets or, failing that, from the bundled seed.
         if catalog.presets.isEmpty {
-            if let presetResponse = try? await APIResponseDecoder.send(builder.get("/v1/compat/presets"), via: transport),
+            // Presets change rarely: reuse the ones we already have before asking the server again.
+            if let previous = cached(now: clock(), requireFresh: false)?.catalog.presets, !previous.isEmpty {
+                catalog.presets = previous
+            } else if let presetResponse = try? await APIResponseDecoder.send(builder.get("/v1/compat/presets"), via: transport),
                let presets = try? APIResponseDecoder.decode([String: CompatPreset].self, from: presetResponse) {
                 catalog.presets = presets
             } else if let seed = try? Self.bundledSeed() {

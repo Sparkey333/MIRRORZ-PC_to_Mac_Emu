@@ -190,7 +190,8 @@ final class RemoteProtocolTests: XCTestCase {
     func testPairingCodeNormalization() {
         XCTAssertEqual(PairingCode.normalize("7K3-MZP"), "7K3MZP")
         XCTAssertEqual(PairingCode.normalize(" 7k3 mzp "), "7K3MZP")
-        XCTAssertEqual(PairingCode.normalize("ol1.i_l"), "011111")
+        XCTAssertEqual(PairingCode.normalize("ol1.i_ll"), "011111")
+        XCTAssertNil(PairingCode.normalize("ol1.i_l"), "five symbols is too short")
         XCTAssertEqual(PairingCode.normalize("MZ3MZP"), "MZ3MZP", "no prefix stripping for pairing codes")
         XCTAssertNil(PairingCode.normalize("7K3MZ"))
         XCTAssertNil(PairingCode.normalize("7K3MZPX"))
@@ -337,7 +338,8 @@ final class RemoteProtocolTests: XCTestCase {
     // MARK: Identity and discovery (§1, §7.1)
 
     func testDeviceHash() {
-        XCTAssertEqual(RemoteProtocol.deviceHash("device-fixture-0001"), "17d4b8a5c4e1b0f8")
+        // sha256("device-fixture-0001") prefix, cross-checked against server/src/remote/auth.ts deviceHash().
+        XCTAssertEqual(RemoteProtocol.deviceHash("device-fixture-0001"), "a5573d19ee6d0bf7")
         XCTAssertEqual(RemoteProtocol.deviceHash("device-fixture-0001").count, 16)
     }
 
