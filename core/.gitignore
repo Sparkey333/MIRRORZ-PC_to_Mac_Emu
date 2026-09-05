@@ -1,0 +1,10 @@
+# Cargo build output
+/target/
+
+# Generated Swift / Kotlin bindings, static libraries and the xcframework
+# (produced by scripts/generate-bindings.sh, build-apple.sh, build-android.sh).
+/bindings/generated/
+
+# Editor / OS noise
+.DS_Store
+*.swp

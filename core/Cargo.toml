@@ -1,0 +1,35 @@
+[package]
+name = "mirrorz-core"
+version = "1.0.0"
+edition = "2021"
+rust-version = "1.80"
+description = "MIRRORZ shared core: license verification, key normalization, App Router, compatibility catalog and machine validation. Consumed by the macOS/iOS apps (Swift via UniFFI) and the Android companion (Kotlin via UniFFI)."
+publish = false
+
+[lib]
+name = "mirrorz_core"
+crate-type = ["lib", "staticlib", "cdylib"]
+
+[[bin]]
+name = "uniffi-bindgen"
+path = "src/bin/uniffi-bindgen.rs"
+required-features = ["cli"]
+
+[features]
+default = []
+# Enables the `uniffi-bindgen` binary (pulls in clap etc.). Library consumers never need it.
+cli = ["uniffi/cli"]
+
+[dependencies]
+uniffi = { version = "0.32" }
+ed25519-dalek = { version = "2", default-features = false, features = ["std"] }
+base64 = "0.22"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+thiserror = "2"
+
+[profile.release]
+opt-level = 3
+lto = "fat"
+codegen-units = 1
+debug = false

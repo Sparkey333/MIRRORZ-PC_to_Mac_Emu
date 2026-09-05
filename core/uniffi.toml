@@ -1,0 +1,28 @@
+# UniFFI bindings configuration for mirrorz-core.
+# Read automatically by `uniffi-bindgen generate` (library mode) from the crate root.
+
+[bindings.swift]
+# Swift module the apps import: `import MirrorzCore`.
+module_name = "MirrorzCore"
+# Name of the C module (header + modulemap) the Swift file links against.
+ffi_module_name = "MirrorzCoreFFI"
+# Records are value types that never change after crossing the FFI; expose them as `let`.
+generate_immutable_records = true
+# Keep argument labels so call sites read naturally in Swift.
+omit_argument_labels = false
+# Every uniffi::Enum becomes CaseIterable (handy for pickers such as GuestOs / PlanId).
+generate_case_iterable_conformance = true
+# Records/enums conform to Codable so hosts can cache Entitlement / CompatApp values.
+generate_codable_conformance = true
+
+[bindings.kotlin]
+# Kotlin package the companion imports: `import com.mirrorz.core.*`.
+package_name = "com.mirrorz.core"
+# The shared library name: `libmirrorz_core.so` in jniLibs.
+cdylib_name = "mirrorz_core"
+generate_immutable_records = true
+# Android target: use the platform cleaner (SystemCleaner on API 33+, JNA cleaner below).
+android = true
+android_cleaner = true
+# Kotlin 2.x so enums use `entries` instead of `values()`.
+kotlin_target_version = "2.0.0"
