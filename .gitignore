@@ -41,3 +41,4 @@ target/
 *.log
 npm-debug.log*
 website/dist/
+.workflows/
