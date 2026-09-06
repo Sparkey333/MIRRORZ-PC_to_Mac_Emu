@@ -1,48 +1,120 @@
 {
-  "_comment": "Single source of truth for prices. PROVISIONAL until docs/research/market/pricing-landscape-and-strategy.md is finalized; clients read display strings from the stores at runtime, the website reads this file at build time.",
+  "_comment": "Single source of truth for prices. Adopted from Ladder B (prosumer, perpetual-first) in docs/research/market/pricing-landscape-and-strategy.md; clients read display strings from the stores at runtime, the website reads this file at build time.",
   "currency": "USD",
-  "status": "provisional",
-  "principles": ["No ads, ever", "No nag screens", "Perpetual option on every consumer plan", "Perpetual = 12 months of feature updates, security updates forever, never expires", "Subscriptions can be cancelled in one click", "Switch-from-competitor discount", "Family sharing on Apple platforms"],
+  "status": "recommended",
+  "principles": [
+    "No ads, ever",
+    "No nag screens",
+    "Perpetual option on every consumer plan",
+    "Perpetual = 12 months of feature updates, security updates forever, never expires",
+    "Subscriptions can be cancelled in one click",
+    "Switch-from-competitor discount",
+    "Family sharing on Apple platforms"
+  ],
   "plans": {
     "standard": {
       "name": "MIRRORZ Standard",
       "tagline": "Run Windows and PC apps on your Mac. AutoCAD-ready.",
-      "monthly": 7.99,
-      "annual": 59.99,
-      "perpetual": 129.99,
-      "perpetual_upgrade_after_updates_window": 49.99,
+      "monthly": 9.99,
+      "annual": 79.0,
+      "perpetual": 149.0,
+      "perpetual_upgrade_after_updates_window": 59.0,
       "devices": 3,
-      "product_ids": { "monthly": "com.mirrorz.standard.monthly", "annual": "com.mirrorz.standard.annual", "perpetual": "com.mirrorz.standard.perpetual" }
+      "product_ids": {
+        "monthly": "com.mirrorz.standard.monthly",
+        "annual": "com.mirrorz.standard.annual",
+        "perpetual": "com.mirrorz.standard.perpetual"
+      },
+      "update_pass_note": "Optional yearly update pass after the included 12 months; never required to keep working."
     },
     "pro": {
       "name": "MIRRORZ Pro",
-      "tagline": "Everything in Standard plus developer & power tools.",
-      "monthly": 11.99,
-      "annual": 89.99,
-      "perpetual": 179.99,
-      "perpetual_upgrade_after_updates_window": 69.99,
+      "tagline": "Everything in Standard for 5 Macs, plus developer & power tools.",
+      "monthly": 14.99,
+      "annual": 129.0,
+      "perpetual": 229.0,
+      "perpetual_upgrade_after_updates_window": 89.0,
       "devices": 5,
-      "product_ids": { "monthly": "com.mirrorz.pro.monthly", "annual": "com.mirrorz.pro.annual", "perpetual": "com.mirrorz.pro.perpetual" }
+      "product_ids": {
+        "monthly": "com.mirrorz.pro.monthly",
+        "annual": "com.mirrorz.pro.annual",
+        "perpetual": "com.mirrorz.pro.perpetual"
+      },
+      "family_sharing": true
     },
     "business": {
       "name": "MIRRORZ Business",
-      "tagline": "Per-seat, centrally managed, MDM-deployable.",
-      "annual_per_seat": 99.99,
+      "tagline": "Per-seat, centrally managed, MDM-deployable, priority support with SLA.",
+      "annual_per_seat": 199.0,
       "min_seats": 5,
       "devices_per_seat": 2,
-      "product_ids": { "annual": "com.mirrorz.business.annual" },
+      "product_ids": {
+        "annual": "com.mirrorz.business.annual"
+      },
       "channel": "direct only (Stripe / invoice)"
     }
   },
-  "trial": { "days": 14, "requires_card": false, "one_per_device": true },
+  "trial": {
+    "days": 14,
+    "requires_card": false,
+    "one_per_device": true
+  },
   "offers": {
-    "switch": { "name": "Switch from Parallels / VMware / CrossOver", "discount_pct": 30, "applies_to": ["annual", "perpetual"], "proof": "upload a receipt or license email; verified by support" },
-    "education": { "discount_pct": 40, "applies_to": ["annual", "perpetual"] }
+    "switch": {
+      "name": "Switch from Parallels, VMware or CrossOver",
+      "discount_pct_first_year": 50,
+      "perpetual_trade_in_price": 99.0,
+      "unused_months_credit_max": 6,
+      "applies_to": [
+        "annual",
+        "perpetual"
+      ],
+      "proof": "any Parallels/VMware/CrossOver licence key or receipt; verified by support",
+      "extras": [
+        "one-click import of Windows apps found in an existing Parallels VM",
+        "30-day money-back guarantee"
+      ]
+    },
+    "education": {
+      "discount_pct": 50,
+      "applies_to": [
+        "annual",
+        "perpetual"
+      ]
+    }
   },
   "stores": {
-    "mac_app_store": { "sells": ["standard", "pro"], "perpetual_as": "non-consumable IAP", "family_sharing": true },
-    "ios_app_store": { "sells": ["standard", "pro"], "note": "Companion app; purchases sync to the Mac via the same Apple ID / MIRRORZ account" },
-    "google_play": { "sells": ["standard", "pro"], "note": "Companion app; one-time products for perpetual" },
-    "direct": { "sells": ["standard", "pro", "business"], "processor": "Stripe", "note": "Perpetual keys delivered by email; notarized direct-download build" }
-  }
+    "mac_app_store": {
+      "sells": [
+        "standard",
+        "pro"
+      ],
+      "perpetual_as": "non-consumable IAP",
+      "family_sharing": true
+    },
+    "ios_app_store": {
+      "sells": [
+        "standard",
+        "pro"
+      ],
+      "note": "Companion app; purchases sync to the Mac via the same Apple ID / MIRRORZ account"
+    },
+    "google_play": {
+      "sells": [
+        "standard",
+        "pro"
+      ],
+      "note": "Companion app; one-time products for perpetual"
+    },
+    "direct": {
+      "sells": [
+        "standard",
+        "pro",
+        "business"
+      ],
+      "processor": "Stripe",
+      "note": "Perpetual keys delivered by email; notarized direct-download build. Perpetual buyers are steered direct because the App Store cannot sell paid version upgrades cleanly."
+    }
+  },
+  "rationale": "CrossOver+ ($74/yr) is the direct comparable for a translation layer; Parallels Standard is $99.99/yr or $219.99 perpetual plus a separate Windows licence; MIRRORZ Bottles need no Windows licence, so first-year total cost is under one third of Parallels + Windows. Perpetual answers the strongest review sentiment (forced renewals, perpetual price hikes)."
 }

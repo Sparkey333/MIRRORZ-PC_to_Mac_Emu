@@ -1,49 +1,260 @@
 {
-  "verified": "2026-09-03",
+  "verified": "2026-09-06",
   "note": "Competitor facts come from the verified reports in docs/research/competitors/. MIRRORZ entries are labelled v1 (at launch), beta, or roadmap.",
-  "columns": ["MIRRORZ", "Parallels Desktop 27", "VMware Fusion Pro 26H1", "CrossOver 26", "UTM 4.7 / 5.0 beta"],
+  "columns": [
+    "MIRRORZ",
+    "Parallels Desktop 27",
+    "VMware Fusion Pro 26H1",
+    "CrossOver 26",
+    "UTM 4.7 / 5.0 beta"
+  ],
   "groups": [
-    { "title": "Price", "rows": [
-      ["Monthly plan", "$7.99/mo (Standard)", "None (annual only)", "Free", "None", "Free"],
-      ["Annual plan", "$59.99/yr (Standard) · $89.99/yr (Pro)", "$99.99/yr Standard · $119.99/yr Pro · $149.99/yr Business", "Free (community support only)", "$74 first year, $34/yr renewal", "Free ($9.99 on the Mac App Store)"],
-      ["Perpetual license", "$129.99 (Standard) · $179.99 (Pro); never expires, 12 months of feature updates, security updates forever", "$219.99 Standard only; one major version, new major every year", "n/a", "$494 lifetime; annual plans keep perpetual use of versions you had", "n/a"],
-      ["Windows license included", "No (bought from Microsoft; we guide you)", "No", "No", "Not needed (Wine)", "No"],
-      ["Ads / upsell prompts", "None, ever", "Toolbox promotions and upgrade prompts reported", "None", "None", "None"],
-      ["Free trial", "14 days, no card", "14 days", "n/a", "14 days", "n/a"]
-    ]},
-    { "title": "Runtimes", "rows": [
-      ["Full Windows 11 ARM machine", "v1", "Yes", "Yes", "No", "Yes"],
-      ["x64 Windows apps", "v1 via Windows Prism emulation inside the machine", "Yes via Prism; own x86 VM emulator is a slow preview", "Yes via Prism", "Yes via Rosetta 2 (ARM64/FEX preview)", "Yes via Prism; x86 VMs are slow TCG"],
-      ["Wine-based lightweight runtime (no Windows license)", "v1 Bottles (Wine 11, DXMT)", "No", "No", "Yes (its core product)", "No"],
-      ["Picks the right runtime per app automatically", "v1 App Router", "No", "No", "No", "No"],
-      ["Linux / macOS guests", "v1 (Virtualization.framework)", "Yes", "Yes (no macOS guests on Apple Silicon)", "No", "Yes"],
-      ["Nested virtualization (WSL2, Hyper-V)", "roadmap", "No", "No", "n/a", "No"]
-    ]},
-    { "title": "Graphics", "rows": [
-      ["DirectX 11 in Windows machines", "beta at launch (open Triton/Neptune driver path + DXMT)", "Yes (DX 11.1, Metal-backed)", "Yes (Metal-backed)", "Yes via D3DMetal/DXMT in Bottles", "Experimental in 5.0 beta"],
-      ["DirectX 12", "roadmap (AutoCAD Fast visual styles)", "No", "No", "Partial (D3DMetal, Apple-licensed)", "Experimental in 5.0.5 beta (D3DMetal)"],
-      ["OpenGL in Windows machines", "v1 (OpenGL via Mesa driver path)", "OpenGL 4.3 (new Metal driver)", "OpenGL 4.3", "n/a", "No"],
-      ["CAD graphics preset (cursor, HiDPI, hardware acceleration)", "v1", "Generic profiles only", "No", "No", "No"]
-    ]},
-    { "title": "Integration", "rows": [
-      ["Seamless windows (Mirror Mode / Coherence)", "v1 for Bottles and Machines", "Coherence", "Removed (Unity dropped in 13.6)", "Native windows (Wine)", "No"],
-      ["Shared folders, clipboard, drag and drop", "v1", "Yes", "Clipboard yes; no shared folders for Windows 11 ARM", "Direct file access", "SPICE tools"],
-      ["Per-app fix-ups from a compatibility database", "v1 (AutoCAD, Revit, QuickBooks, Office…)", "No", "No", "Community ratings, CAD entries outdated", "No"],
-      ["Stable virtual hardware identity for licensing-sensitive apps", "v1", "Mostly", "Mostly", "n/a", "Manual"],
-      ["Phone / tablet remote control", "v1 companions (iOS, Android)", "Parallels Access (separate)", "No", "No", "UTM Remote (QEMU VMs, no GPU)"]
-    ]},
-    { "title": "Platform & support", "rows": [
-      ["Apple Silicon", "Yes (macOS 14+)", "Yes (macOS 14+, Intel dropped in 27)", "Yes (macOS 15+)", "Yes (Intel dropped in 27, early 2027)", "Yes"],
-      ["Mac App Store", "Yes, full-featured", "Limited sandbox edition", "No", "No", "Yes ($9.99)"],
-      ["Support", "Email + priority on Pro, 30-day refund on direct sales", "30 days phone/chat with perpetual; subscription unlimited", "Community forum only", "Ticket support while active", "Community"],
-      ["Telemetry", "Off by default; only anonymous compatibility reports if you opt in", "Product usage data incl. VM contents (opt-out)", "CEIP opt-in", "Opt-in", "None"]
-    ]}
+    {
+      "title": "Price",
+      "rows": [
+        [
+          "Monthly plan",
+          "$9.99/mo (Standard) \u00b7 $14.99/mo (Pro)",
+          "None (annual only)",
+          "Free",
+          "None",
+          "Free"
+        ],
+        [
+          "Annual plan",
+          "$79/yr (Standard, 3 Macs) \u00b7 $129/yr (Pro, 5 Macs)",
+          "$99.99/yr Standard \u00b7 $119.99/yr Pro \u00b7 $149.99/yr Business",
+          "Free (community support only)",
+          "$74 first year, $34/yr renewal",
+          "Free ($9.99 on the Mac App Store)"
+        ],
+        [
+          "Perpetual license",
+          "$149 (Standard) \u00b7 $229 (Pro); never expires, 12 months of feature updates, security updates forever, optional $59/yr update pass",
+          "$219.99 Standard only; one major version, new major every year",
+          "n/a",
+          "$494 lifetime; annual plans keep perpetual use of versions you had",
+          "n/a"
+        ],
+        [
+          "Windows license included",
+          "No (bought from Microsoft; we guide you)",
+          "No",
+          "No",
+          "Not needed (Wine)",
+          "No"
+        ],
+        [
+          "Ads / upsell prompts",
+          "None, ever",
+          "Toolbox promotions and upgrade prompts reported",
+          "None",
+          "None",
+          "None"
+        ],
+        [
+          "Free trial",
+          "14 days, no card; switchers get 50% off year one or a $99 perpetual trade-in",
+          "14 days",
+          "n/a",
+          "14 days",
+          "n/a"
+        ]
+      ]
+    },
+    {
+      "title": "Runtimes",
+      "rows": [
+        [
+          "Full Windows 11 ARM machine",
+          "v1",
+          "Yes",
+          "Yes",
+          "No",
+          "Yes"
+        ],
+        [
+          "x64 Windows apps",
+          "v1 via Windows Prism emulation inside the machine",
+          "Yes via Prism; own x86 VM emulator is a slow preview",
+          "Yes via Prism",
+          "Yes via Rosetta 2 (ARM64/FEX preview)",
+          "Yes via Prism; x86 VMs are slow TCG"
+        ],
+        [
+          "Wine-based lightweight runtime (no Windows license)",
+          "v1 Bottles (Wine 11, DXMT)",
+          "No",
+          "No",
+          "Yes (its core product)",
+          "No"
+        ],
+        [
+          "Picks the right runtime per app automatically",
+          "v1 App Router",
+          "No",
+          "No",
+          "No",
+          "No"
+        ],
+        [
+          "Linux / macOS guests",
+          "v1 (Virtualization.framework)",
+          "Yes",
+          "Yes (no macOS guests on Apple Silicon)",
+          "No",
+          "Yes"
+        ],
+        [
+          "Nested virtualization (WSL2, Hyper-V)",
+          "roadmap",
+          "No",
+          "No",
+          "n/a",
+          "No"
+        ]
+      ]
+    },
+    {
+      "title": "Graphics",
+      "rows": [
+        [
+          "DirectX 11 in Windows machines",
+          "beta at launch (open Triton/Neptune driver path + DXMT)",
+          "Yes (DX 11.1, Metal-backed)",
+          "Yes (Metal-backed)",
+          "Yes via D3DMetal/DXMT in Bottles",
+          "Experimental in 5.0 beta"
+        ],
+        [
+          "DirectX 12",
+          "roadmap (AutoCAD Fast visual styles)",
+          "No",
+          "No",
+          "Partial (D3DMetal, Apple-licensed)",
+          "Experimental in 5.0.5 beta (D3DMetal)"
+        ],
+        [
+          "OpenGL in Windows machines",
+          "v1 (OpenGL via Mesa driver path)",
+          "OpenGL 4.3 (new Metal driver)",
+          "OpenGL 4.3",
+          "n/a",
+          "No"
+        ],
+        [
+          "CAD graphics preset (cursor, HiDPI, hardware acceleration)",
+          "v1",
+          "Generic profiles only",
+          "No",
+          "No",
+          "No"
+        ]
+      ]
+    },
+    {
+      "title": "Integration",
+      "rows": [
+        [
+          "Seamless windows (Mirror Mode / Coherence)",
+          "v1 for Bottles and Machines",
+          "Coherence",
+          "Removed (Unity dropped in 13.6)",
+          "Native windows (Wine)",
+          "No"
+        ],
+        [
+          "Shared folders, clipboard, drag and drop",
+          "v1",
+          "Yes",
+          "Clipboard yes; no shared folders for Windows 11 ARM",
+          "Direct file access",
+          "SPICE tools"
+        ],
+        [
+          "Per-app fix-ups from a compatibility database",
+          "v1 (AutoCAD, Revit, QuickBooks, Office\u2026)",
+          "No",
+          "No",
+          "Community ratings, CAD entries outdated",
+          "No"
+        ],
+        [
+          "Stable virtual hardware identity for licensing-sensitive apps",
+          "v1",
+          "Mostly",
+          "Mostly",
+          "n/a",
+          "Manual"
+        ],
+        [
+          "Phone / tablet remote control",
+          "v1 companions (iOS, Android)",
+          "Parallels Access (separate)",
+          "No",
+          "No",
+          "UTM Remote (QEMU VMs, no GPU)"
+        ]
+      ]
+    },
+    {
+      "title": "Platform & support",
+      "rows": [
+        [
+          "Apple Silicon",
+          "Yes (macOS 14+)",
+          "Yes (macOS 14+, Intel dropped in 27)",
+          "Yes (macOS 15+)",
+          "Yes (Intel dropped in 27, early 2027)",
+          "Yes"
+        ],
+        [
+          "Mac App Store",
+          "Yes, full-featured",
+          "Limited sandbox edition",
+          "No",
+          "No",
+          "Yes ($9.99)"
+        ],
+        [
+          "Support",
+          "Email + priority on Pro, 30-day refund on direct sales",
+          "30 days phone/chat with perpetual; subscription unlimited",
+          "Community forum only",
+          "Ticket support while active",
+          "Community"
+        ],
+        [
+          "Telemetry",
+          "Off by default; only anonymous compatibility reports if you opt in",
+          "Product usage data incl. VM contents (opt-out)",
+          "CEIP opt-in",
+          "Opt-in",
+          "None"
+        ]
+      ]
+    }
   ],
   "sources": [
-    { "label": "Parallels Desktop 27 report", "path": "docs/research/competitors/parallels-desktop.md" },
-    { "label": "VMware Fusion report", "path": "docs/research/competitors/vmware-fusion.md" },
-    { "label": "CrossOver report", "path": "docs/research/competitors/crossover.md" },
-    { "label": "UTM report", "path": "docs/research/competitors/utm.md" },
-    { "label": "Wine front-ends report", "path": "docs/research/competitors/whisky-kegworks-playonmac-bottles.md" }
+    {
+      "label": "Parallels Desktop 27 report",
+      "path": "docs/research/competitors/parallels-desktop.md"
+    },
+    {
+      "label": "VMware Fusion report",
+      "path": "docs/research/competitors/vmware-fusion.md"
+    },
+    {
+      "label": "CrossOver report",
+      "path": "docs/research/competitors/crossover.md"
+    },
+    {
+      "label": "UTM report",
+      "path": "docs/research/competitors/utm.md"
+    },
+    {
+      "label": "Wine front-ends report",
+      "path": "docs/research/competitors/whisky-kegworks-playonmac-bottles.md"
+    }
   ]
 }
