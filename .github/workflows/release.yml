@@ -1,0 +1,38 @@
+name: release
+on:
+  push:
+    tags: ['v*']
+jobs:
+  server-image:
+    runs-on: ubuntu-latest
+    permissions: { contents: read, packages: write }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/login-action@v3
+        with: { registry: ghcr.io, username: '${{ github.actor }}', password: '${{ secrets.GITHUB_TOKEN }}' }
+      - uses: docker/build-push-action@v6
+        with:
+          context: server
+          push: true
+          tags: ghcr.io/${{ github.repository_owner }}/mirrorz-server:${{ github.ref_name }}
+  macos-dmg:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: maxim-lobanov/setup-xcode@v1
+        with: { xcode-version: latest-stable }
+      - run: brew install xcodegen create-dmg
+      - name: Build (unsigned archive)
+        working-directory: apps/macos
+        run: |
+          test -f project.yml || exit 0
+          xcodegen generate
+          xcodebuild -project MIRRORZ.xcodeproj -scheme MIRRORZ -configuration Release -destination 'platform=macOS' CODE_SIGNING_ALLOWED=NO -derivedDataPath build build
+          mkdir -p dist && create-dmg --volname MIRRORZ dist/MIRRORZ-${{ github.ref_name }}-unsigned.dmg build/Build/Products/Release/MIRRORZ.app || true
+      # Signing + notarization for the direct-download build (Developer ID). Required secrets:
+      #   APPLE_DEVELOPER_ID_CERT_P12 / APPLE_DEVELOPER_ID_CERT_PASSWORD  – Developer ID Application certificate
+      #   APPLE_NOTARY_KEY_ID / APPLE_NOTARY_ISSUER_ID / APPLE_NOTARY_KEY_P8  – App Store Connect API key for notarytool
+      #   SPARKLE_ED_PRIVATE_KEY                                              – EdDSA key for the Sparkle appcast
+      # See store/direct/notarization-and-sparkle.md for the exact codesign/notarytool/stapler sequence.
+      - uses: actions/upload-artifact@v4
+        with: { name: macos-dmg, path: apps/macos/dist/*.dmg, if-no-files-found: ignore }

@@ -1,0 +1,28 @@
+name: core
+on:
+  push:
+    paths: ['core/**', 'server/src/compat/seed.json', '.github/workflows/core.yml']
+  pull_request:
+    paths: ['core/**', 'server/src/compat/seed.json', '.github/workflows/core.yml']
+jobs:
+  test:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-15]
+    runs-on: ${{ matrix.os }}
+    defaults: { run: { working-directory: core } }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with: { components: 'clippy, rustfmt' }
+      - uses: Swatinem/rust-cache@v2
+        with: { workspaces: core }
+      - run: cargo fmt --check
+      - run: cargo clippy --all-targets --features cli -- -D warnings
+      - run: cargo test
+      - name: Generate UniFFI bindings (smoke)
+        run: |
+          cargo build --features cli --bin uniffi-bindgen
+          cargo build --lib
+          ./target/debug/uniffi-bindgen generate --library target/debug/libmirrorz_core.$([ "$RUNNER_OS" = macOS ] && echo dylib || echo so) --language swift --out-dir target/bindings/swift
+          ./target/debug/uniffi-bindgen generate --library target/debug/libmirrorz_core.$([ "$RUNNER_OS" = macOS ] && echo dylib || echo so) --language kotlin --out-dir target/bindings/kotlin
